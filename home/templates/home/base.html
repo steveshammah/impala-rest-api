@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel='stylesheet' href='{% static 'home/style.css' %}' />
+    {%if title%}
+    <title>{{title}}</title>
+    {%else%}
+    <title>Impala Saracens</title>
+    {% endif %}
+  </head>
+  <body>
+      <nav>
+          <ul>
+              <li><a href='/'>Home</a></li>
+              <li><a href='/fixtures'>Fixtures</a></li>
+              <li><a href='/videos'>Videos</a></li>
+              <li><a href='/articles'>Articles</a></li>
+              <li><a href='/team'>Team</a></li>
+              <li><a href='/contact-us'>Contact Us</a></li>
+              <li><a href='/visit-impala'>Impala Grounds</a></li>
+              <li><a href='/admin'>Admin</a></li>
+          </u>
+      </nav>
+    <div class='container'>
+
+    {% block content%}
+    <!--Block Content-->
+    {% endblock%}
+    </div>  
+
+  </body>
+</html>
