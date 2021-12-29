@@ -60,6 +60,8 @@ def create_article(request):
 
     if serializer.is_valid():
         serializer.save()
+    else:
+        print('Form is not valid')
     return Response(serializer.data)
 
 
