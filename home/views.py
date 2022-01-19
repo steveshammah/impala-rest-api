@@ -48,7 +48,7 @@ def article(request, pk):
         serializer = ArticleSerializer(article, many=False)
         return Response(serializer.data)
     except Exception as error:
-        print('FILE NOT FOUND: ', error)
+        # print('FILE NOT FOUND: ', error)
         return Response(f'File with ID : {pk} Not Found')
 
 

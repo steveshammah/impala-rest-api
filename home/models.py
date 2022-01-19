@@ -1,3 +1,4 @@
+from unicodedata import name
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -5,8 +6,12 @@ from django.contrib.auth.models import User
 
 
 class Author(models.Model):
-    name = models.CharField(max_length=200)
-    email = models.EmailField()
+    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, null=True)
+    phone = models.CharField(max_length=15, null=True)
+    profile_pic = models.ImageField(default="", null=True, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
+    is_staff = models.BooleanField(default=False, null=True)
     def __str__(self):
         return self.name
 
@@ -21,7 +26,7 @@ class Articles(models.Model):
     image_2 = models.ImageField(upload_to='uploads/', blank=True)
     caption_2 = models.CharField(max_length=250, null=True, default='Impala Rugby')
     type = models.CharField(max_length=100, null=True, default='article')
-    tags = models.TextField(max_length=150, null=True, default='Impala')
+    tags = models.CharField(max_length=150, null=True, default='Impala')
     created = models.DateTimeField(auto_now_add=True)
     posted = models.DateTimeField(auto_now=True)
 
@@ -30,6 +35,7 @@ class Articles(models.Model):
 
     def __str__(self) -> str:
         return str(self.title)
+
 
 
 
@@ -56,3 +62,10 @@ class Player(models.Model):
 #     match_date = models.DateField(None)
 #     venue = models.CharField(max_length=100)
 #     kickoff = models.CharField(max_length=20)
+
+
+class Product(models.Model):
+    PRODUCT_TYPE = ('Jersey', 'Hoodies', 'T-shirt', 'sweat-gear', 'a')
+    name = models.CharField(max_length=150, blank=True, null=True)
+    price = models.IntegerField()
+    description = models.TextField(max_length=500)
