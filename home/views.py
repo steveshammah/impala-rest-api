@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from .models import Articles
+from .models import Articles, Product, Author
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .serializers import ArticleSerializer, UsersSerializer
+from .serializers import ArticleSerializer, UsersSerializer, ProductsSerializer, AuthorSerializer
 # from django.http import JsonResponse
 from django.contrib.auth.models import User
 from home import serializers
@@ -16,6 +16,8 @@ def home(request):
         'ACTIONS': 'ENDPOINT',
         'Users - All': '/api/users/',
         'User - Single': '/api/user/<str:pk>',
+        'Authors - All': '/api/authors/',
+        'Author - Single': '/api/authors/<str:pk>',
         'Articles - All': '/api/articles/',
         'Article - Single': '/api/articles/<str:pk>/',
         'Create Article': '/api/article-create/',
@@ -26,30 +28,61 @@ def home(request):
     return Response(api_urls)
 
 
+# USERS ENDPOINTS
 @api_view(['GET'])
-def users(request):
+def get_all_users(request):
     users = User.objects.all()
     serializer = UsersSerializer(users, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
-def articles(request):
-    print('Getting all posts')
+def get_user(request, pk):
+    try:
+        user = User.objects.get(id=pk)
+        serializer = UsersSerializer(user, many=False)
+        return Response(serializer.data)
+
+    except Exception as error:
+        return Response(f'Product with id {pk} not found')
+
+
+# AUTHORS ENDPOINTS
+@api_view(['GET'])
+def get_all_authors(request):
+    authors = Author.objects.all()
+    serializer = AuthorSerializer(authors, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_author(request, pk):
+    try:
+        author = Author.objects.get(id=pk)
+        serializer = AuthorSerializer(author, many=False)
+        return Response(serializer.data)
+    except Exception as error:
+        return Response(f'Author with id {pk} not found')
+
+
+# ARTICLES ENDPOINTS
+@api_view(['GET'])
+def get_all_articles(request):
+    # print('Getting all posts')
     articles = Articles.objects.all()
     serializer = ArticleSerializer(articles, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
-def article(request, pk):
+def get_article(request, pk):
     try:
         article = Articles.objects.get(id=pk)
         serializer = ArticleSerializer(article, many=False)
         return Response(serializer.data)
     except Exception as error:
         # print('FILE NOT FOUND: ', error)
-        return Response(f'File with ID : {pk} Not Found')
+        return Response(f'Article with ID : {pk} Not Found')
 
 
 @api_view(['POST'])
@@ -80,3 +113,21 @@ def delete_article(request, pk):
     article = Articles.objects.get(id=pk)
     article.delete()
     return Response('Article delete successfully')
+
+
+# PRODUCTS ENDPOINTS
+@api_view(['GET'])
+def get_all_products(request):
+    products = Product.objects.all()
+    serializer = ProductsSerializer(products, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_product(request, pk):
+    try:
+        product = Product.objects.get(id=pk)
+        serializer = ProductsSerializer(product, many=False)
+        return Response(serializer.data)
+    except Exception as error:
+        return Response(f'Product with id {pk} not found')
