@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Articles, Author, Product
+from .models import *
 from django.contrib.auth.models import User
 
 
@@ -13,6 +13,12 @@ class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         fields = '__all__'
+
+
+# class PlayersSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Player
+#         fields = '__all__'
 
 
 class ArticleSerializer(serializers.ModelSerializer):

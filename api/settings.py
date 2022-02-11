@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     'home',
     'rest_framework',
     'corsheaders',
+
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -90,16 +92,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-# DATABASES = {
-#     'default': {
-#     	'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#     	'NAME': 'Impala_API',
-#     	'USER': 'PostgreSQL 14',
-#     	'PASSWORD': 420247,
-#     	'HOST': 'localhost',
-#     	'PORT': 5432,
-#     	}
-#     }
 
 
 # Password validation

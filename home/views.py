@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from .models import Articles, Product, Author
+from .models import *
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .serializers import ArticleSerializer, UsersSerializer, ProductsSerializer, AuthorSerializer
+from .serializers import *
 # from django.http import JsonResponse
 from django.contrib.auth.models import User
 from home import serializers
@@ -43,7 +43,7 @@ def get_user(request, pk):
         serializer = UsersSerializer(user, many=False)
         return Response(serializer.data)
 
-    except Exception as error:
+    except Exception:
         return Response(f'Product with id {pk} not found')
 
 
@@ -61,7 +61,7 @@ def get_author(request, pk):
         author = Author.objects.get(id=pk)
         serializer = AuthorSerializer(author, many=False)
         return Response(serializer.data)
-    except Exception as error:
+    except Exception:
         return Response(f'Author with id {pk} not found')
 
 
@@ -80,8 +80,7 @@ def get_article(request, pk):
         article = Articles.objects.get(id=pk)
         serializer = ArticleSerializer(article, many=False)
         return Response(serializer.data)
-    except Exception as error:
-        # print('FILE NOT FOUND: ', error)
+    except Exception:
         return Response(f'Article with ID : {pk} Not Found')
 
 
@@ -115,6 +114,24 @@ def delete_article(request, pk):
     return Response('Article delete successfully')
 
 
+# PLAYERS ENDPOINTS
+@api_view(['GET'])
+def get_all_players(request):
+    players = Player.objects.all()
+    serializer = PlayersSerializer(players, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_player(request, pk):
+    try:
+        player = Player.objects.get(id=pk)
+        serializer = PlayersSerializer(player, many=False)
+        return Response(serializer.data)
+    except Exception as error:
+        return Response(f'Player with id {pk} not found')
+
+
 # PRODUCTS ENDPOINTS
 @api_view(['GET'])
 def get_all_products(request):
@@ -131,3 +148,4 @@ def get_product(request, pk):
         return Response(serializer.data)
     except Exception as error:
         return Response(f'Product with id {pk} not found')
+
