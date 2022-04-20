@@ -1,0 +1,14 @@
+*.log
+*.pot
+*.pyc
+__pycache__
+
+# SqLite DB
+# db.sqlite3
+
+# virtual environment
+.venv
+
+# Media files
+# media
+
