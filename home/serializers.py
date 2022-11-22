@@ -15,10 +15,10 @@ class AuthorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# class PlayersSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Player
-#         fields = '__all__'
+class PlayersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Player
+        fields = '__all__'
 
 
 class ArticleSerializer(serializers.ModelSerializer):
