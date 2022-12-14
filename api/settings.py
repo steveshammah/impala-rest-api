@@ -2,6 +2,7 @@
 from pathlib import Path
 
 import environ
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -36,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    "django.contrib.sites",
+    # "django.contrib.sites",
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "django.forms",
@@ -93,7 +94,6 @@ WSGI_APPLICATION = 'api.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
 
 DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
@@ -170,3 +170,79 @@ LOGGING = {
     },
     "root": {"level": "INFO", "handlers": ["console"]},
 }
+
+
+# CONSOLE_LOGGING_FORMAT = '%(asctime)s %(levelname)-8s %(threadName)-14s' \
+#     '(%(pathname)s:%(lineno)d) %(name)s.%(funcName)s: %(message)s'
+# CONFIG_FILE = os.path.dirname(__file__)
+# CONSOLE_LOGGING_FILE_LOCATION = os.path.join(CONFIG_FILE.split(
+#     f'config(os.sep)settings')[0], 'django-wrds.log')
+# # FORMAT = '%(hostname)s %(asctime)s %(levelname)-8s' \
+# #     '%(threadName)-14s (%(pathname)s:%(lineno)d) ' \
+# #     '%(name)s.%(funcName)s: %(message)s'
+#
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'loggers': {
+#         # Root logger
+#         '': {
+#             'level': os.getenv('ROOT_LOG_LEVEL', 'INFO'),
+#             'handlers': ['file', 'console'],
+#         },
+#         'django': {
+#             # The 'django' logger is configured by Django out of the box. Here, it is reconfigured in order to
+#             # utilize the file logger and allow configuration at runtime
+#             'handlers': ['file'],
+#             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+#             'propagate': False,
+#         },
+#         'django.server': {
+#             'propagate': True,
+#         },
+#         'django.http': {
+#             'propagate': False,
+#             'level': 'DEBUG',
+#             'handlers': ['file'],
+#         },
+#         'django.db.backends': {
+#             'level': 'DEBUG',
+#             'handlers': ['file'],
+#         },
+#         'django.security.DisallowedHost': {
+#             'level': 'ERROR',
+#             'propagate': False,
+#         },
+#         'django.request': {
+#             'handlers': ['file'],
+#             'level': 'ERROR',
+#             'propagate': True,
+#         },
+#     },
+#     'formatters': {
+#         'my_formatter': {
+#             'format': CONSOLE_LOGGING_FORMAT,
+#             'style': '%',
+#         },
+#         "verbose": {
+#             "format": "%(levelname)s %(asctime)s %(module)s "
+#             "%(process)d %(thread)d %(message)s"
+#         },
+#     },
+#     'handlers': {
+#         'console': {
+#             "level": "DEBUG",
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'verbose',
+#         },
+#         'file': {
+#             'class': 'logging.handlers.RotatingFileHandler',
+#             'filename': CONSOLE_LOGGING_FILE_LOCATION,
+#             'mode': 'a',
+#             'encoding': 'utf-8',
+#             'formatter': 'my_formatter',
+#             'backupCount': 5,
+#             'maxBytes': 10485760,
+#         },
+#     },
+# }
