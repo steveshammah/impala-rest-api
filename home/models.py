@@ -134,6 +134,7 @@ class Fixture(models.Model):
                 raise ValidationError("Home team cannot be similar to the Away team.")
 
 
+
 class Partner(models.Model):
     name = models.CharField(max_length=150, blank=True, null=True)
     logo = models.ImageField(null=True, blank=True, default='/placeholder.png')

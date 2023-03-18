@@ -1243,6 +1243,7 @@ class PartnerViewSet(GenericViewSet):
 #
 #         return Response({"success": "true"}, status=status.HTTP_200_OK)
 
+
 class FixtureResultViewSet(GenericViewSet):
     def create(self, request, *args, **kwargs):
         """
