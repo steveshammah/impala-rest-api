@@ -39,6 +39,7 @@ WORKDIR ${APP_HOME}
 RUN apt-get update && apt-get install --no-install-recommends -y \
   # psycopg2 dependencies
   libpq-dev \
+  libgdal-dev binutils gdal-bin libproj19 libproj-dev \
   # Translations dependencies
   gettext \
   # cleaning up unused files

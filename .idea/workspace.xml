@@ -5,11 +5,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f097d88-8e2c-4258-8048-24d12d3959dc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GDAL-3.2.3-cp39-cp39-win_amd64.whl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/home/migrations/0023_smsmodel.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/home/migrations/0024_alter_product_count_in_stock_alter_product_price_and_more.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/home/migrations/0025_alter_partner_url.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/home/migrations/0026_alter_product_product_name.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/home/migrations/0027_alter_fixture_away_team_alter_fixture_home_team.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/home/migrations/0028_remove_fixtureresult_fixture_results_and_more.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/home/migrations/0029_fixture_location_alter_fixtureresult_fixture.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/isaac-quesada-M03-ASoAxgk-unsplash.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/isaac-quesada-M03-ASoAxgk-unsplash_wAlEIGk.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/isaac-quesada-M03-ASoAxgk-unsplash_zZwAV0V.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/uploads/james-lee-wE4MCIuh0po-unsplash.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/uploads/james-lee-wE4MCIuh0po-unsplash_Zm2MzHC.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/uploads/james-lee-wE4MCIuh0po-unsplash_w4LqXju.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/uploads/marcel-strauss-AydfIofZXNY-unsplash_ILPlUSa.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/uploads/marcel-strauss-AydfIofZXNY-unsplash_LNvBG3G.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/uploads/marcel-strauss-AydfIofZXNY-unsplash_SVA4QWh.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/uploads/tijs-van-leur-MYXB2gVu46Y-unsplash_WueU3IO.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/uploads/tijs-van-leur-MYXB2gVu46Y-unsplash_k7v8Vye.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/schema.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/swagger-ui.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compose/local/django/start" beforeDir="false" afterPath="$PROJECT_DIR$/compose/local/django/start" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/compose/local/django/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/compose/local/django/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/compose/production/postgres/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/compose/production/postgres/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/home/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/home/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/home/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/home/models.py" afterDir="false" />
@@ -104,6 +125,25 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Python tests for tests.test_users" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="impala-rest-api" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/home" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;tests.test_users&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python tests.Python tests for tests.test_users" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
