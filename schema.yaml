@@ -1,0 +1,2837 @@
+openapi: 3.0.3
+info:
+  title: ''
+  version: 0.0.0
+paths:
+  /api/:
+    get:
+      operationId: api_retrieve
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api-token-auth/:
+    post:
+      operationId: api_token_auth_create
+      tags:
+      - api-token-auth
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+          description: ''
+  /api/article-create/:
+    post:
+      operationId: api_article_create_create
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/article-delete/{id}:
+    delete:
+      operationId: api_article_delete_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/article-update/{id}:
+    post:
+      operationId: api_article_update_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/articles/:
+    get:
+      operationId: api_articles_retrieve
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/articles/{id}/:
+    get:
+      operationId: api_articles_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/authors/:
+    get:
+      operationId: api_authors_retrieve
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/authors/{id}/:
+    get:
+      operationId: api_authors_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/players/:
+    get:
+      operationId: api_players_retrieve
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/players/{id}/:
+    get:
+      operationId: api_players_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/products/:
+    get:
+      operationId: api_products_retrieve
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/products/{id}/:
+    get:
+      operationId: api_products_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/users/:
+    get:
+      operationId: api_users_retrieve
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/users/{id}/:
+    get:
+      operationId: api_users_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/articles/:
+    get:
+      operationId: api_v1_articles_list
+      description: List a queryset.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedListArticleList'
+          description: ''
+    post:
+      operationId: api_v1_articles_create
+      description: Create article instance .
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateArticle'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateArticle'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateArticle'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateArticle'
+          description: ''
+  /api/v1/articles/{lookup_value}/:
+    get:
+      operationId: api_v1_articles_retrieve
+      description: Retrieve an article instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+          description: ''
+    put:
+      operationId: api_v1_articles_update
+      description: Update an article instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateArticle'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateArticle'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateArticle'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateArticle'
+          description: ''
+    patch:
+      operationId: api_v1_articles_partial_update
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateArticle'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateArticle'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateArticle'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateArticle'
+          description: ''
+    delete:
+      operationId: api_v1_articles_destroy
+      description: Destroy an article instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/auth/login/:
+    post:
+      operationId: api_v1_auth_login_create
+      description: Login USER ViewSet.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSignIn'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserSignIn'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserSignIn'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSignIn'
+          description: ''
+  /api/v1/auth/logout/:
+    post:
+      operationId: api_v1_auth_logout_create
+      description: Logout USER ViewSet.
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/retrieve/:
+    get:
+      operationId: api_v1_auth_retrieve_retrieve
+      description: Retrieve USER ViewSet.
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/authors/:
+    get:
+      operationId: api_v1_authors_list
+      description: List a queryset.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedListAuthorList'
+          description: ''
+    post:
+      operationId: api_v1_authors_create
+      description: Create author instance .
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAuthor'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateAuthor'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateAuthor'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateAuthor'
+          description: ''
+  /api/v1/authors/{lookup_value}/:
+    get:
+      operationId: api_v1_authors_retrieve
+      description: Retrieve an author instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+          description: ''
+    put:
+      operationId: api_v1_authors_update
+      description: Update an author instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAuthor'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateAuthor'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateAuthor'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateAuthor'
+          description: ''
+    patch:
+      operationId: api_v1_authors_partial_update
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateAuthor'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateAuthor'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateAuthor'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateAuthor'
+          description: ''
+    delete:
+      operationId: api_v1_authors_destroy
+      description: Destroy an author instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/fixture_results/:
+    get:
+      operationId: api_v1_fixture_results_list
+      description: List a queryset.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedListFixtureResultList'
+          description: ''
+    post:
+      operationId: api_v1_fixture_results_create
+      description: Create fixture-result instance .
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFixtureResult'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateFixtureResult'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateFixtureResult'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateFixtureResult'
+          description: ''
+  /api/v1/fixture_results/{lookup_value}/:
+    get:
+      operationId: api_v1_fixture_results_retrieve
+      description: Retrieve a fixture-result instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FixtureResult'
+          description: ''
+    put:
+      operationId: api_v1_fixture_results_update
+      description: Update a fixture-result instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateFixtureResult'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateFixtureResult'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateFixtureResult'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateFixtureResult'
+          description: ''
+    patch:
+      operationId: api_v1_fixture_results_partial_update
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateFixtureResult'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateFixtureResult'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateFixtureResult'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateFixtureResult'
+          description: ''
+    delete:
+      operationId: api_v1_fixture_results_destroy
+      description: Destroy a fixture-result instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/fixtures/:
+    get:
+      operationId: api_v1_fixtures_list
+      description: List a queryset.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedListFixtureList'
+          description: ''
+    post:
+      operationId: api_v1_fixtures_create
+      description: Create fixture instance .
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFixture'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateFixture'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateFixture'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateFixture'
+          description: ''
+  /api/v1/fixtures/{lookup_value}/:
+    get:
+      operationId: api_v1_fixtures_retrieve
+      description: Retrieve a fixture instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fixture'
+          description: ''
+    put:
+      operationId: api_v1_fixtures_update
+      description: Update a fixture instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateFixture'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateFixture'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateFixture'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateFixture'
+          description: ''
+    patch:
+      operationId: api_v1_fixtures_partial_update
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateFixture'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateFixture'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateFixture'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateFixture'
+          description: ''
+    delete:
+      operationId: api_v1_fixtures_destroy
+      description: Destroy a fixture instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/partners/:
+    get:
+      operationId: api_v1_partners_list
+      description: List a queryset.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedListPartnerList'
+          description: ''
+    post:
+      operationId: api_v1_partners_create
+      description: Create partner instance .
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePartner'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreatePartner'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreatePartner'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePartner'
+          description: ''
+  /api/v1/partners/{lookup_value}/:
+    get:
+      operationId: api_v1_partners_retrieve
+      description: Retrieve a partner instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Partner'
+          description: ''
+    put:
+      operationId: api_v1_partners_update
+      description: Update a partner instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePartner'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdatePartner'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdatePartner'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePartner'
+          description: ''
+    patch:
+      operationId: api_v1_partners_partial_update
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdatePartner'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdatePartner'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdatePartner'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePartner'
+          description: ''
+    delete:
+      operationId: api_v1_partners_destroy
+      description: Destroy a partner instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/players/:
+    get:
+      operationId: api_v1_players_list
+      description: List a queryset.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedListPlayerList'
+          description: ''
+    post:
+      operationId: api_v1_players_create
+      description: Create player instance.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePlayer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreatePlayer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreatePlayer'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePlayer'
+          description: ''
+  /api/v1/players/{lookup_value}/:
+    get:
+      operationId: api_v1_players_retrieve
+      description: Retrieve a player instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Player'
+          description: ''
+    put:
+      operationId: api_v1_players_update
+      description: Update an player instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePlayer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdatePlayer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdatePlayer'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePlayer'
+          description: ''
+    patch:
+      operationId: api_v1_players_partial_update
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdatePlayer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdatePlayer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdatePlayer'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePlayer'
+          description: ''
+    delete:
+      operationId: api_v1_players_destroy
+      description: Destroy a player instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/products/:
+    get:
+      operationId: api_v1_products_list
+      description: List a queryset.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedListProductList'
+          description: ''
+    post:
+      operationId: api_v1_products_create
+      description: Create product instance .
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateProduct'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateProduct'
+          description: ''
+  /api/v1/products/{lookup_value}/:
+    get:
+      operationId: api_v1_products_retrieve
+      description: Retrieve a product instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    put:
+      operationId: api_v1_products_update
+      description: Update a product instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateProduct'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateProduct'
+          description: ''
+    patch:
+      operationId: api_v1_products_partial_update
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateProduct'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateProduct'
+          description: ''
+    delete:
+      operationId: api_v1_products_destroy
+      description: Destroy a product instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/teams/:
+    get:
+      operationId: api_v1_teams_list
+      description: List a queryset.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedListTeamList'
+          description: ''
+    post:
+      operationId: api_v1_teams_create
+      description: Create team instance .
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTeam'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateTeam'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateTeam'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTeam'
+          description: ''
+  /api/v1/teams/{lookup_value}/:
+    get:
+      operationId: api_v1_teams_retrieve
+      description: Retrieve a team instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+          description: ''
+    put:
+      operationId: api_v1_teams_update
+      description: Update a team instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTeam'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateTeam'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateTeam'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateTeam'
+          description: ''
+    patch:
+      operationId: api_v1_teams_partial_update
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateTeam'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateTeam'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateTeam'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateTeam'
+          description: ''
+    delete:
+      operationId: api_v1_teams_destroy
+      description: Destroy a team instance.
+      parameters:
+      - in: path
+        name: lookup_value
+        schema:
+          type: string
+          pattern: ^[\w\-\@\.\$]+$
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /schema/:
+    get:
+      operationId: schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - schema
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+components:
+  schemas:
+    Article:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        author:
+          type: string
+          readOnly: true
+        title:
+          type: string
+          maxLength: 100
+        headline:
+          type: string
+          maxLength: 250
+        content_1:
+          type: string
+        image_1:
+          type: string
+          format: uri
+          nullable: true
+        caption_1:
+          type: string
+          nullable: true
+          maxLength: 250
+        content_2:
+          type: string
+          nullable: true
+        image_2:
+          type: string
+          format: uri
+          nullable: true
+        caption_2:
+          type: string
+          nullable: true
+          maxLength: 250
+        type:
+          type: string
+          nullable: true
+          maxLength: 100
+        tags:
+          type: string
+          nullable: true
+          maxLength: 150
+        posted:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - author
+      - content_1
+      - headline
+      - id
+      - posted
+      - title
+    AuthToken:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - password
+      - token
+      - username
+    Author:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        author_name:
+          type: string
+        profile_pic:
+          type: string
+          format: uri
+          nullable: true
+        is_editor:
+          type: boolean
+        phone:
+          type: string
+          maxLength: 100
+      required:
+      - author_name
+      - id
+    BlankEnum:
+      enum:
+      - ''
+    CreateArticle:
+      type: object
+      properties:
+        author:
+          type: string
+        title:
+          type: string
+        headline:
+          type: string
+        content_1:
+          type: string
+        content_2:
+          type: string
+        image_1:
+          type: string
+          format: uri
+        image_2:
+          type: string
+          format: uri
+        caption_1:
+          type: string
+        caption_2:
+          type: string
+        type:
+          type: string
+        tags:
+          type: string
+      required:
+      - author
+      - caption_1
+      - caption_2
+      - content_1
+      - content_2
+      - headline
+      - image_1
+      - image_2
+      - tags
+      - title
+      - type
+    CreateAuthor:
+      type: object
+      properties:
+        username:
+          type: string
+        phone:
+          type: string
+          maxLength: 22
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        profile_pic:
+          type: string
+          format: uri
+        is_editor:
+          type: integer
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 255
+      required:
+      - email
+      - first_name
+      - is_editor
+      - last_name
+      - password
+      - phone
+      - username
+    CreateFixture:
+      type: object
+      properties:
+        home_team:
+          type: string
+        away_team:
+          type: string
+        match_date:
+          type: string
+          format: date
+        venue:
+          type: string
+        kickoff:
+          type: string
+      required:
+      - away_team
+      - home_team
+      - kickoff
+      - match_date
+      - venue
+    CreateFixtureResult:
+      type: object
+      properties:
+        fixture:
+          type: string
+        home_team_result:
+          type: integer
+        away_team_result:
+          type: integer
+        MOTM:
+          type: string
+      required:
+      - MOTM
+      - away_team_result
+      - fixture
+      - home_team_result
+    CreatePartner:
+      type: object
+      properties:
+        name:
+          type: string
+        logo:
+          type: string
+          format: uri
+        about:
+          type: string
+        tag:
+          type: string
+        url:
+          type: string
+        website:
+          type: string
+      required:
+      - about
+      - name
+      - tag
+      - url
+      - website
+    CreatePlayer:
+      type: object
+      properties:
+        username:
+          type: string
+        phone:
+          type: string
+          maxLength: 22
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        profile_pic:
+          type: string
+          format: uri
+        date_of_birth:
+          type: string
+          format: date
+        team:
+          type: string
+          maxLength: 22
+        social_link:
+          type: string
+          maxLength: 100
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 255
+      required:
+      - date_of_birth
+      - email
+      - first_name
+      - last_name
+      - password
+      - phone
+      - social_link
+      - team
+      - username
+    CreateProduct:
+      type: object
+      properties:
+        product_name:
+          type: string
+        image:
+          type: string
+          format: uri
+        price:
+          type: string
+        description:
+          type: string
+        color:
+          type: string
+        count_in_stock:
+          type: string
+      required:
+      - color
+      - count_in_stock
+      - description
+      - price
+      - product_name
+    CreateTeam:
+      type: object
+      properties:
+        name:
+          type: string
+        logo:
+          type: string
+          format: uri
+        description:
+          type: string
+        home_ground:
+          type: string
+        location:
+          type: string
+        league:
+          type: string
+      required:
+      - description
+      - home_ground
+      - league
+      - location
+      - logo
+      - name
+    Fixture:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        home_team:
+          type: string
+        away_team:
+          type: string
+        match_date:
+          type: string
+          format: date
+        venue:
+          type: string
+          maxLength: 100
+        kickoff:
+          type: string
+          maxLength: 20
+      required:
+      - away_team
+      - home_team
+      - id
+      - kickoff
+      - match_date
+      - venue
+    FixtureResult:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        home_team_result:
+          type: integer
+        away_team_result:
+          type: integer
+        fixture:
+          type: string
+          readOnly: true
+        MOTM:
+          type: string
+          readOnly: true
+      required:
+      - MOTM
+      - away_team_result
+      - fixture
+      - home_team_result
+      - id
+    ListArticle:
+      type: object
+      properties:
+        article_author:
+          type: string
+          readOnly: true
+        title:
+          type: string
+          maxLength: 100
+        content_1:
+          type: string
+        image_1:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - article_author
+      - content_1
+      - title
+    ListAuthor:
+      type: object
+      properties:
+        author_name:
+          type: string
+        is_editor:
+          type: boolean
+        phone:
+          type: string
+          maxLength: 100
+      required:
+      - author_name
+    ListFixture:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        home_team:
+          type: string
+        away_team:
+          type: string
+        match_date:
+          type: string
+          format: date
+        venue:
+          type: string
+          maxLength: 100
+      required:
+      - away_team
+      - home_team
+      - id
+      - match_date
+      - venue
+    ListFixtureResult:
+      type: object
+      properties:
+        fixture:
+          type: string
+          readOnly: true
+        home_team_result:
+          type: integer
+        away_team_result:
+          type: integer
+        MOTM:
+          type: string
+          readOnly: true
+      required:
+      - MOTM
+      - away_team_result
+      - fixture
+      - home_team_result
+    ListPartner:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+          maxLength: 150
+        website:
+          type: string
+          nullable: true
+          maxLength: 200
+      required:
+      - id
+    ListPlayer:
+      type: object
+      properties:
+        player_name:
+          type: string
+        team:
+          type: string
+        social_link:
+          type: string
+          nullable: true
+          maxLength: 150
+      required:
+      - player_name
+      - team
+    ListProduct:
+      type: object
+      properties:
+        product_name:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ProductNameEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        image:
+          type: string
+          format: uri
+          nullable: true
+        price:
+          type: integer
+        description:
+          type: string
+          maxLength: 500
+      required:
+      - description
+      - price
+    ListTeam:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+          maxLength: 150
+        location:
+          type: string
+          maxLength: 100
+        league:
+          type: string
+          nullable: true
+          maxLength: 100
+      required:
+      - id
+      - location
+    NullEnum:
+      enum:
+      - null
+    PaginatedListArticleList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListArticle'
+    PaginatedListAuthorList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListAuthor'
+    PaginatedListFixtureList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListFixture'
+    PaginatedListFixtureResultList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListFixtureResult'
+    PaginatedListPartnerList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListPartner'
+    PaginatedListPlayerList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListPlayer'
+    PaginatedListProductList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListProduct'
+    PaginatedListTeamList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListTeam'
+    Partner:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+          maxLength: 150
+        logo:
+          type: string
+          format: uri
+          nullable: true
+        about:
+          type: string
+          maxLength: 500
+        tag:
+          type: string
+          nullable: true
+          maxLength: 200
+        url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        website:
+          type: string
+          nullable: true
+          maxLength: 200
+      required:
+      - about
+      - id
+    PatchedUpdateArticle:
+      type: object
+      properties:
+        author:
+          type: string
+        title:
+          type: string
+        headline:
+          type: string
+        content_1:
+          type: string
+        content_2:
+          type: string
+        image_1:
+          type: string
+          format: uri
+        caption_1:
+          type: string
+        image_2:
+          type: string
+          format: uri
+        caption_2:
+          type: string
+        type:
+          type: string
+        tags:
+          type: string
+    PatchedUpdateAuthor:
+      type: object
+      properties:
+        profile_pic:
+          type: string
+          format: uri
+        is_editor:
+          type: integer
+        phone:
+          type: string
+          maxLength: 22
+    PatchedUpdateFixture:
+      type: object
+      properties:
+        home_team:
+          type: string
+        away_team:
+          type: string
+        match_date:
+          type: string
+          format: date
+        venue:
+          type: string
+        kickoff:
+          type: string
+    PatchedUpdateFixtureResult:
+      type: object
+      properties:
+        fixture:
+          type: string
+        home_team_result:
+          type: integer
+        away_team_result:
+          type: integer
+        MOTM:
+          type: string
+    PatchedUpdatePartner:
+      type: object
+      properties:
+        name:
+          type: string
+        logo:
+          type: string
+          format: uri
+        about:
+          type: string
+        tag:
+          type: string
+        url:
+          type: string
+        website:
+          type: string
+    PatchedUpdatePlayer:
+      type: object
+      properties:
+        date_of_birth:
+          type: string
+          format: date
+        profile_pic:
+          type: string
+          format: uri
+        phone:
+          type: string
+          maxLength: 22
+        team:
+          type: string
+          maxLength: 22
+        social_link:
+          type: string
+          maxLength: 100
+    PatchedUpdateProduct:
+      type: object
+      properties:
+        product_name:
+          type: string
+        image:
+          type: string
+          format: uri
+        description:
+          type: string
+        price:
+          type: string
+        color:
+          type: string
+        count_in_stock:
+          type: string
+    PatchedUpdateTeam:
+      type: object
+      properties:
+        name:
+          type: string
+        logo:
+          type: string
+          format: uri
+        description:
+          type: string
+        home_ground:
+          type: string
+        location:
+          type: string
+        league:
+          type: string
+    Player:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        player_name:
+          type: string
+        profile_pic:
+          type: string
+          format: uri
+          nullable: true
+        team:
+          type: string
+        social_link:
+          type: string
+          nullable: true
+          maxLength: 150
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        phone:
+          type: string
+          maxLength: 100
+      required:
+      - id
+      - phone
+      - player_name
+      - team
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        product_name:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ProductNameEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        image:
+          type: string
+          format: uri
+          nullable: true
+        price:
+          type: integer
+        description:
+          type: string
+          maxLength: 500
+        color:
+          type: string
+          nullable: true
+          maxLength: 100
+        count_in_stock:
+          type: integer
+          nullable: true
+        date_added:
+          type: string
+          format: date-time
+          readOnly: true
+        date_updated:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - date_added
+      - date_updated
+      - description
+      - id
+      - price
+    ProductNameEnum:
+      enum:
+      - Jersey
+      - Hoodie
+      - Tshirt
+      - Sweater
+      - Watterbottle
+      type: string
+    Team:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+          maxLength: 150
+        logo:
+          type: string
+          format: uri
+          nullable: true
+        description:
+          type: string
+          maxLength: 500
+        home_ground:
+          type: string
+          maxLength: 100
+        location:
+          type: string
+          maxLength: 100
+        league:
+          type: string
+          nullable: true
+          maxLength: 100
+      required:
+      - description
+      - home_ground
+      - id
+      - location
+    UpdateArticle:
+      type: object
+      properties:
+        author:
+          type: string
+        title:
+          type: string
+        headline:
+          type: string
+        content_1:
+          type: string
+        content_2:
+          type: string
+        image_1:
+          type: string
+          format: uri
+        caption_1:
+          type: string
+        image_2:
+          type: string
+          format: uri
+        caption_2:
+          type: string
+        type:
+          type: string
+        tags:
+          type: string
+      required:
+      - author
+      - caption_1
+      - caption_2
+      - content_1
+      - content_2
+      - headline
+      - image_1
+      - image_2
+      - tags
+      - title
+      - type
+    UpdateAuthor:
+      type: object
+      properties:
+        profile_pic:
+          type: string
+          format: uri
+        is_editor:
+          type: integer
+        phone:
+          type: string
+          maxLength: 22
+      required:
+      - is_editor
+      - phone
+    UpdateFixture:
+      type: object
+      properties:
+        home_team:
+          type: string
+        away_team:
+          type: string
+        match_date:
+          type: string
+          format: date
+        venue:
+          type: string
+        kickoff:
+          type: string
+      required:
+      - away_team
+      - home_team
+      - kickoff
+      - match_date
+      - venue
+    UpdateFixtureResult:
+      type: object
+      properties:
+        fixture:
+          type: string
+        home_team_result:
+          type: integer
+        away_team_result:
+          type: integer
+        MOTM:
+          type: string
+      required:
+      - MOTM
+      - away_team_result
+      - fixture
+      - home_team_result
+    UpdatePartner:
+      type: object
+      properties:
+        name:
+          type: string
+        logo:
+          type: string
+          format: uri
+        about:
+          type: string
+        tag:
+          type: string
+        url:
+          type: string
+        website:
+          type: string
+      required:
+      - about
+      - name
+      - tag
+      - url
+      - website
+    UpdatePlayer:
+      type: object
+      properties:
+        date_of_birth:
+          type: string
+          format: date
+        profile_pic:
+          type: string
+          format: uri
+        phone:
+          type: string
+          maxLength: 22
+        team:
+          type: string
+          maxLength: 22
+        social_link:
+          type: string
+          maxLength: 100
+      required:
+      - date_of_birth
+      - phone
+      - social_link
+      - team
+    UpdateProduct:
+      type: object
+      properties:
+        product_name:
+          type: string
+        image:
+          type: string
+          format: uri
+        description:
+          type: string
+        price:
+          type: string
+        color:
+          type: string
+        count_in_stock:
+          type: string
+      required:
+      - color
+      - count_in_stock
+      - description
+      - price
+      - product_name
+    UpdateTeam:
+      type: object
+      properties:
+        name:
+          type: string
+        logo:
+          type: string
+          format: uri
+        description:
+          type: string
+        home_ground:
+          type: string
+        location:
+          type: string
+        league:
+          type: string
+      required:
+      - description
+      - home_ground
+      - league
+      - location
+      - name
+    UserSignIn:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 255
+      required:
+      - password
+      - username
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"

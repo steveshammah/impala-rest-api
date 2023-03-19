@@ -197,4 +197,26 @@ urlpatterns = [
         ),
         name="partners.action",
         ),
+    re_path(
+            r"^v1/fixture_results/$",
+            views.FixtureResultViewSet.as_view(
+                {
+                    "get": "list",
+                    "post": "create",
+                }
+            ),
+            name="fixture_results",
+        ),
+    re_path(
+        r"^v1/fixture_results/%s/$" % PVAR_PROFILE_ID,
+        views.FixtureResultViewSet.as_view(
+            {
+                "get": "retrieve",
+                "put": "update",
+                "patch": "partial_update",
+                "delete": "destroy",
+            }
+        ),
+        name="fixture_results.action",
+        ),
 ]

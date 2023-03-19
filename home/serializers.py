@@ -1,31 +1,51 @@
 import re
 
 from rest_framework import serializers
-from .models import *
 from django.contrib.auth.models import BaseUserManager, User
 from datetime import date
+from django.utils.timezone import now
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import authenticate, password_validation
 # from django.utils.translation import ugettext_lazy as _
 
 
+from .models import *
+
+
 class UsersSerializer(serializers.ModelSerializer):
+    days_since_joined = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ['id', 'username', 'email']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'days_since_joined']
+
+    def get_days_since_joined(self, obj):
+        return (now() - obj.date_joined).days
 
 
 class AuthorSerializer(serializers.ModelSerializer):
+    author_name = serializers.SlugRelatedField(
+        slug_field='username',
+        queryset=User.objects.all(),
+        source='user',
+    )
+
     class Meta:
         model = Author
-        fields = '__all__'
+        fields = ['id', 'author_name', 'profile_pic', 'is_editor', 'phone']
 
 
 class ListAuthorSerializer(serializers.ModelSerializer):
+    author_name = serializers.SlugRelatedField(
+        slug_field='username',
+        queryset=User.objects.all(),
+        source='user',
+    )
+
     class Meta:
         model = Author
-        fields = ['id', 'is_editor', 'phone']
+        fields = ['author_name', 'is_editor', 'phone']
 
 
 class CreateAuthorSerializer(serializers.ModelSerializer):
@@ -168,9 +188,212 @@ class UpdateAuthorSerializer(serializers.Serializer):
 
 
 class PlayerSerializer(serializers.ModelSerializer):
+    player_name = serializers.SlugRelatedField(
+        slug_field='username',
+        queryset=User.objects.all(),
+        source='user'
+    )
+    team = serializers.SlugRelatedField(
+        slug_field='name',
+        queryset=Team.objects.all(),
+    )
+
     class Meta:
         model = Player
-        fields = '__all__'
+        fields = ['id', 'player_name', 'profile_pic', 'team', 'social_link', 'date_of_birth', 'team', 'phone']
+
+
+class ListPlayerSerializer(serializers.ModelSerializer):
+
+    player_name = serializers.SlugRelatedField(
+        slug_field='username',
+        queryset=User.objects.all(),
+        source='user'
+    )
+    team = serializers.SlugRelatedField(
+        slug_field='name',
+        queryset=Team.objects.all(),
+    )
+
+    class Meta:
+        model = Player
+        fields = ['player_name', 'team', 'social_link']
+
+
+class CreatePlayerSerializer(serializers.ModelSerializer):
+    username = serializers.CharField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    email = serializers.EmailField()
+    date_of_birth = serializers.DateField()
+    profile_pic = serializers.ImageField(required=False)
+    phone = serializers.CharField(max_length=22, required=True)
+    team = serializers.CharField(max_length=22, required=True)
+    social_link = serializers.CharField(max_length=100, required=True)
+    password = serializers.CharField(
+        required=True,
+        style={'input_type': 'password'},
+        trim_whitespace=False,
+        max_length=255,
+        write_only=True,
+        validators=[validate_password],
+    )
+
+    class Meta:
+        model = Player
+        fields = ["username", "phone", "first_name", "last_name", "email", "profile_pic",
+                  "date_of_birth", "team", "social_link", "password"]
+        validators: list = []
+
+    def validate_username(self, value):
+        user = User.objects.filter(username=value)
+        if user:
+            raise serializers.ValidationError("Username already taken")
+        return value
+
+    def validate_first_name(self, value):
+        # evaluate whether all characters are letters
+        return value
+
+    def validate_last_name(self, value):
+        # evaluate whether all characters are letters
+        return value
+
+    def validate_email(self, value):
+        user = User.objects.filter(email=value)
+        if user:
+            raise serializers.ValidationError("Email is already taken")
+        return BaseUserManager.normalize_email(value)
+
+    def validate_phone(self, value):
+        telephone_regex = "^\+\({1}\d{1,4}\){1}([\s.-])\d{3,4}[\s.-]?\d{2,4}[\s.-]?\d{2,4}$"
+        regexed_telephone = re.search(telephone_regex, value)
+
+        if regexed_telephone:
+            value = re.sub(r'[^0-9]', '', value)
+            value = "+" + value
+        else:
+            raise serializers.ValidationError(
+                "Wrong format. Please use the format: +(COUNTRYCODE)-NATIONALNUMBER e.g. +(12)-34567890")
+        return value
+
+    def validate_profile_pic(self, value):
+        return value
+
+    def validate_team(self, value):
+        team = Team.objects.get(name=value)
+        value = team
+        return value
+
+    def validate_social_link(self, value):
+        return value
+
+    def validate_password(self, value):
+        password_validation.validate_password(value)
+        return value
+
+    def create(self, validated_data):
+        try:
+            user = User.objects.create(
+                username=validated_data['username'],
+                email=validated_data['email'],
+                first_name=validated_data['first_name'],
+                last_name=validated_data['last_name'],
+            )
+            user.set_password(validated_data['password'])
+            user.is_active = True
+            user.save()
+
+            player_profile = Player.objects.create(
+                user=user,
+                date_of_birth=validated_data['date_of_birth'],
+                phone=validated_data['phone'],
+                # profile_pic=validated_data['profile_pic'],
+                team=validated_data['team'],
+                social_link=validated_data['social_link'],
+            )
+            player_profile.save()
+
+            validated_data["user"] = user
+            validated_data["player"] = player_profile
+
+            validated_data.pop("username")
+            validated_data.pop("first_name")
+            validated_data.pop("last_name")
+            validated_data.pop("email")
+            validated_data.pop("password")
+
+        except Exception:
+            raise serializers.ValidationError("Player creation failed.")
+
+        return validated_data
+
+
+class UpdatePlayerSerializer(serializers.Serializer):
+    date_of_birth = serializers.DateField()
+    profile_pic = serializers.ImageField(required=False)
+    phone = serializers.CharField(max_length=22, required=True)
+    team = serializers.CharField(max_length=22, required=True)
+    social_link = serializers.CharField(max_length=100, required=True)
+
+    class Meta:
+        model = Player
+        fields = ["phone", "profile_pic", "date_of_birth", "team", "social_link"]
+        validators: list = []
+
+    def validate_phone(self, value):
+        telephone_regex = "^\+\({1}\d{1,4}\){1}([\s.-])\d{3,4}[\s.-]?\d{2,4}[\s.-]?\d{2,4}$"
+        regexed_telephone = re.search(telephone_regex, value)
+
+        if regexed_telephone:
+            value = re.sub(r'[^0-9]', '', value)
+            value = "+" + value
+        else:
+            raise serializers.ValidationError(
+                "Wrong format. Please use the format: +(COUNTRYCODE)-NATIONALNUMBER e.g. +(12)-34567890")
+        return value
+
+    def validate_profile_pic(self, value):
+        return value
+
+    def validate_team(self, value):
+        try:
+            team = Team.objects.get(name=value)
+            value = team
+        except Exception:
+            raise serializers.ValidationError("Please enter a valid team")
+        return value
+
+    def validate_social_link(self, value):
+        return value
+
+    def save(self, *args, **kwargs):
+        if self.partial:
+            if self.validated_data:
+                if self.validated_data.get("phone"):
+                    self.instance.phone = self.validated_data.get("phone")
+                if self.validated_data.get("profile_pic"):
+                    self.instance.profile_pic = self.validated_data.get(
+                        "profile_pic")
+                if self.validated_data.get("date_of_birth"):
+                    self.instance.date_of_birth = self.validated_data.get(
+                        "date_of_birth")
+                if self.validated_data.get("team"):
+                    self.instance.team = self.validated_data.get(
+                        "team")
+                if self.validated_data.get("social_link"):
+                    self.instance.social_link = self.validated_data.get(
+                        "social_link")
+                self.instance.save()
+            else:
+                return "No data to update"
+        else:
+            self.instance.profile_pic = self.validated_data.get("profile_pic")
+            self.instance.date_of_birth = self.validated_data.get("date_of_birth")
+            self.instance.phone = self.validated_data.get("phone")
+            self.instance.team = self.validated_data.get("team")
+            self.instance.social_link = self.validated_data.get("social_link")
+            self.instance.save()
 
 
 class ListPlayerSerializer(serializers.ModelSerializer):
@@ -354,15 +577,26 @@ class UpdatePlayerSerializer(serializers.Serializer):
 
 
 class ArticleSerializer(serializers.ModelSerializer):
+    author = serializers.SerializerMethodField()
+
     class Meta:
         model = Article
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ['created']
+
+    def get_author(self, obj):
+        return obj.author.user.username
 
 
 class ListArticleSerializer(serializers.ModelSerializer):
+    article_author = serializers.SerializerMethodField()
+
     class Meta:
         model = Article
-        fields = ['id', 'author', 'title', 'image_1']
+        fields = ['article_author', 'title', 'content_1', 'image_1']
+
+    def get_article_author(self, obj):
+        return obj.author.user.username
 
 
 class CreateArticleSerializer(serializers.ModelSerializer):
@@ -393,9 +627,15 @@ class CreateArticleSerializer(serializers.ModelSerializer):
         return value
 
     def validate_title(self, value):
+        article = Article.objects.get(title=value)
+        if article:
+            raise serializers.ValidationError("The title entered already exists.")
         return value
 
     def validate_headline(self, value):
+        article = Article.objects.get(headline=value)
+        if article:
+            raise serializers.ValidationError("The headline entered already exists.")
         return value
 
     def validate_content_1(self, value):
@@ -571,7 +811,7 @@ class ListTeamSerializer(serializers.ModelSerializer):
 
 class CreateTeamSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
-    logo = serializers.ImageField(required=False)
+    logo = serializers.ImageField()
     description = serializers.CharField()
     home_ground = serializers.CharField()
     location = serializers.CharField()
@@ -687,78 +927,6 @@ class UpdateTeamSerializer(serializers.Serializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = '__all__'
-
-
-class ListProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Product
-        fields = ['id', 'product_name', 'image', 'price', 'description']
-
-
-class CreateProductSerializer(serializers.ModelSerializer):
-    product_name = serializers.CharField()
-    image = serializers.ImageField(required=False)
-    description = serializers.CharField()
-    price = serializers.CharField()
-    color = serializers.CharField()
-    count_in_stock = serializers.CharField()
-
-    class Meta:
-        model = Product
-        fields = ['product_name', 'image', 'price', 'description', 'color', 'count_in_stock']
-        validators: list = []
-
-    def validate_product_name(self, value):
-        if value not in ["J", "H", "T", "S", "W"]:
-            raise serializers.ValidationError("The selection has to be J, H, T, S or W")
-        return value
-
-    def validate_image(self, value):
-        return value
-
-    def validate_description(self, value):
-        return value
-
-    def validate_price(self, value):
-        return value
-
-    def validate_color(self, value):
-        return value
-
-    def validate_count_in_stock(self, value):
-        return value
-
-    def create(self, validated_data):
-        try:
-            product = Product.objects.create(
-                product_name=validated_data['product_name'],
-                # image=validated_data['image'],
-                description=validated_data['description'],
-                price=validated_data['price'],
-                color=validated_data['color'],
-                count_in_stock=validated_data['count_in_stock'],
-            )
-            product.save()
-
-            validated_data["product"] = product
-
-        except Exception:
-            raise serializers.ValidationError("Product creation failed.")
-
-        return validated_data
-
-
-class UpdateProductSerializer(serializers.Serializer):
-    product_name = serializers.CharField()
-    image = serializers.ImageField(required=False)
-    description = serializers.CharField()
-    price = serializers.CharField()
-    color = serializers.CharField()
-    count_in_stock = serializers.CharField()
-
-    class Meta:
-        model = Product
         fields = ['product_name', 'image', 'price', 'description', 'color', 'count_in_stock']
         validators: list = []
 
@@ -819,7 +987,156 @@ class FixtureSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ListProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['product_name', 'image', 'price', 'description']
+
+
+class CreateProductSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField()
+    image = serializers.ImageField(required=False)
+    description = serializers.CharField()
+    price = serializers.CharField()
+    color = serializers.CharField()
+    count_in_stock = serializers.CharField()
+
+    class Meta:
+        model = Product
+        fields = ['product_name', 'image', 'price', 'description', 'color', 'count_in_stock']
+        validators: list = []
+
+    def validate_product_name(self, value):
+        if value not in ["Jersey", "Hoodie", "Tshirt", "Sweater", "Watterbottle"]:
+            raise serializers.ValidationError("The selection has to be Jersey, Hoodie, Tshirt, Sweater or Watterbottle")
+        return value
+
+    def validate_image(self, value):
+        return value
+
+    def validate_description(self, value):
+        return value
+
+    def validate_price(self, value):
+        return value
+
+    def validate_color(self, value):
+        return value
+
+    def validate_count_in_stock(self, value):
+        return value
+
+    def create(self, validated_data):
+        try:
+            product = Product.objects.create(
+                product_name=validated_data['product_name'],
+                # image=validated_data['image'],
+                description=validated_data['description'],
+                price=validated_data['price'],
+                color=validated_data['color'],
+                count_in_stock=validated_data['count_in_stock'],
+            )
+            product.save()
+
+            validated_data["product"] = product
+
+        except Exception:
+            raise serializers.ValidationError("Product creation failed.")
+
+        return validated_data
+
+
+class UpdateProductSerializer(serializers.Serializer):
+    product_name = serializers.CharField()
+    image = serializers.ImageField(required=False)
+    description = serializers.CharField()
+    price = serializers.CharField()
+    color = serializers.CharField()
+    count_in_stock = serializers.CharField()
+
+    class Meta:
+        model = Product
+        fields = ['product_name', 'image', 'price', 'description', 'color', 'count_in_stock']
+        validators: list = []
+
+    def validate_product_name(self, value):
+        if value not in ["Jersey", "Hoodie", "Tshirt", "Sweater", "Watterbottle"]:
+            raise serializers.ValidationError("The selection has to be Jersey, Hoodie, Tshirt, Sweater or Watterbottle")
+        return value
+
+    def validate_image(self, value):
+        return value
+
+    def validate_description(self, value):
+        return value
+
+    def validate_price(self, value):
+        return value
+
+    def validate_color(self, value):
+        return value
+
+    def validate_count_in_stock(self, value):
+        return value
+
+    def save(self, *args, **kwargs):
+        if self.partial:
+            if self.validated_data:
+                if self.validated_data.get("product_name"):
+                    self.instance.product_name = self.validated_data.get("product_name")
+                if self.validated_data.get("image"):
+                    self.instance.image = self.validated_data.get(
+                        "image")
+                if self.validated_data.get("description"):
+                    self.instance.description = self.validated_data.get(
+                        "description")
+                if self.validated_data.get("price"):
+                    self.instance.price = self.validated_data.get(
+                        "price")
+                if self.validated_data.get("color"):
+                    self.instance.color = self.validated_data.get(
+                        "color")
+                if self.validated_data.get("count_in_stock"):
+                    self.instance.count_in_stock = self.validated_data.get(
+                        "count_in_stock")
+                self.instance.save()
+            else:
+                return "No data to update"
+        else:
+            self.instance.product_name = self.validated_data.get("product_name")
+            self.instance.image = self.validated_data.get("image")
+            self.instance.description = self.validated_data.get("description")
+            self.instance.price = self.validated_data.get("price")
+            self.instance.color = self.validated_data.get("color")
+            self.instance.count_in_stock = self.validated_data.get("count_in_stock")
+            self.instance.save()
+
+
+class FixtureSerializer(serializers.ModelSerializer):
+    home_team = serializers.SlugRelatedField(
+        slug_field='name',
+        queryset=Team.objects.all(),
+    )
+    away_team = serializers.SlugRelatedField(
+        slug_field='name',
+        queryset=Team.objects.all(),
+    )
+
+    class Meta:
+        model = Fixture
+        fields = '__all__'
+
+
 class ListFixtureSerializer(serializers.ModelSerializer):
+    home_team = serializers.SlugRelatedField(
+        slug_field='name',
+        queryset=Team.objects.all(),
+    )
+    away_team = serializers.SlugRelatedField(
+        slug_field='name',
+        queryset=Team.objects.all(),
+    )
+
     class Meta:
         model = Fixture
         fields = ['id', 'home_team', 'away_team', 'match_date', 'venue']
@@ -1143,3 +1460,141 @@ class SmsModelSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "Code must be 6 digits.")
         return value
+
+
+class FixtureResultSerializer(serializers.ModelSerializer):
+    home_team_result = serializers.IntegerField()
+    away_team_result = serializers.IntegerField()
+    fixture = serializers.SerializerMethodField()
+    MOTM = serializers.SerializerMethodField()
+
+    class Meta:
+        model = FixtureResult
+        fields = '__all__'
+
+    def get_fixture(self, obj):
+        return f'{obj.fixture.id}. {obj.fixture.home_team} VS {obj.fixture.away_team}'
+
+    def get_MOTM(self, obj):
+        return obj.MOTM.user.username
+
+
+class ListFixtureResultSerializer(serializers.ModelSerializer):
+    home_team_result = serializers.IntegerField()
+    away_team_result = serializers.IntegerField()
+    fixture = serializers.SerializerMethodField()
+    MOTM = serializers.SerializerMethodField()
+
+    class Meta:
+        model = FixtureResult
+        fields = ['fixture', 'home_team_result', 'away_team_result', 'MOTM']
+
+    def get_fixture(self, obj):
+        return f'{obj.fixture.id}. {obj.fixture.home_team} VS {obj.fixture.away_team}'
+
+    def get_MOTM(self, obj):
+        return obj.MOTM.user.username
+
+
+class CreateFixtureResultSerializer(serializers.ModelSerializer):
+    fixture = serializers.CharField()
+    home_team_result = serializers.IntegerField()
+    away_team_result = serializers.IntegerField()
+    MOTM = serializers.CharField()
+
+    class Meta:
+        model = FixtureResult
+        fields = ['fixture', 'home_team_result', 'away_team_result', 'MOTM']
+        validators: list = []
+
+    def validate_fixture(self, value):
+        fixture = Fixture.objects.get(id=value)
+        fixture_results = fixture.associated_fixture.all().count()
+
+        if fixture_results:
+            raise serializers.ValidationError("A fixture cannot have more than one result.")
+        value = fixture
+        return value
+
+    def validate_home_team_result(self, value):
+        return value
+
+    def validate_away_team_result(self, value):
+        return value
+
+    def validate_MOTM(self, value):
+        player = Player.objects.get(id=value)
+        value = player
+        return value
+
+    def create(self, validated_data):
+        try:
+            fixture_result = FixtureResult.objects.create(
+                fixture=validated_data['fixture'],
+                home_team_result=validated_data['home_team_result'],
+                away_team_result=validated_data['away_team_result'],
+                MOTM=validated_data['MOTM']
+            )
+            fixture_result.save()
+
+            validated_data["fixture_result"] = fixture_result
+
+        except Exception:
+            raise serializers.ValidationError("Fixture-result creation failed.")
+
+        return validated_data
+
+
+class UpdateFixtureResultSerializer(serializers.Serializer):
+    fixture = serializers.CharField()
+    home_team_result = serializers.IntegerField()
+    away_team_result = serializers.IntegerField()
+    MOTM = serializers.CharField()
+
+    class Meta:
+        model = Partner
+        fields = ['fixture', 'home_team_result', 'away_team_result', 'MOTM']
+        validators: list = []
+
+    def validate_fixture(self, value):
+        fixture = Fixture.objects.get(id=value)
+
+        if not self.instance.fixture == fixture:
+            raise serializers.ValidationError("The fixture must be the same.")
+        value = fixture
+        return value
+
+    def validate_home_team_result(self, value):
+        return value
+
+    def validate_away_team_result(self, value):
+        return value
+
+    def validate_MOTM(self, value):
+        player = Player.objects.get(id=value)
+        value = player
+        return value
+
+    def save(self, *args, **kwargs):
+        if self.partial:
+            if self.validated_data:
+                if self.validated_data.get("fixture"):
+                    self.instance.fixture = self.validated_data.get("fixture")
+                if self.validated_data.get("home_team_result"):
+                    self.instance.home_team_result = self.validated_data.get(
+                        "home_team_result")
+                if self.validated_data.get("away_team_result"):
+                    self.instance.away_team_result = self.validated_data.get(
+                        "away_team_result")
+                if self.validated_data.get("MOTM"):
+                    self.instance.MOTM = self.validated_data.get(
+                        "MOTM")
+                self.instance.save()
+            else:
+                return "No data to update"
+        else:
+            self.instance.fixture = self.validated_data.get("fixture")
+            self.instance.home_team_result = self.validated_data.get("home_team_result")
+            self.instance.away_team_result = self.validated_data.get("away_team_result")
+            self.instance.MOTM = self.validated_data.get("MOTM")
+            self.instance.save()

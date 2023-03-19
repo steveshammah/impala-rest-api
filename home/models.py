@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.gis.db import models as gis_models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.core.exceptions import ValidationError
@@ -70,9 +71,9 @@ class Article(models.Model):
     title = models.CharField(max_length=100)
     headline = models.CharField(max_length=250)
     content_1 = models.TextField(max_length=None)
-    content_2 = models.TextField(max_length=None, null=True)
     image_1 = models.ImageField(upload_to='uploads/', null=True, blank=True)
     caption_1 = models.CharField(max_length=250, null=True, default='Impala Rugby')
+    content_2 = models.TextField(max_length=None, null=True)
     image_2 = models.ImageField(upload_to='uploads/', null=True, blank=True)
     caption_2 = models.CharField(max_length=250, null=True, default='Impala Rugby')
     type = models.CharField(max_length=100, null=True, default='article')
@@ -89,20 +90,20 @@ class Article(models.Model):
 
 class Product(models.Model):
     PRODUCT_TYPE = [
-        ("J", "Jersey"),
-        ("H", "Hoodies"),
-        ("T", "T-shirt"),
-        ("S", "Sweat-gear"),
-        ("W", "Water-bottle"),
+        ("Jersey", "Jersey"),
+        ("Hoodie", "Hoodies"),
+        ("Tshirt", "T-shirt"),
+        ("Sweater", "Sweat-gear"),
+        ("Watterbottle", "Water-bottle"),
     ]
     product_name = models.CharField(
         choices=PRODUCT_TYPE, max_length=150, blank=True, null=True
     )
     image = models.ImageField(null=True, blank=True, default='/placeholder.png')
-    price = models.IntegerField()
+    price = models.PositiveIntegerField()
     description = models.TextField(max_length=500)
     color = models.CharField(max_length=100, blank=True, null=True)
-    count_in_stock = models.IntegerField(default=0, null=True, blank=True)
+    count_in_stock = models.PositiveIntegerField(default=0, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
@@ -114,15 +115,24 @@ class Product(models.Model):
 
 
 class Fixture(models.Model):
-    home_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='home_team', default='1')
-    away_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='away_team', default='1')
+    home_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='home_team', null=True)
+    away_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='away_team', null=True)
     match_date = models.DateField(None)
     venue = models.CharField(max_length=100)
+    location = gis_models.PointField(srid=4326, null=True, blank=True)
     kickoff = models.CharField(max_length=20)
+
+    @property
+    def lat_long(self):
+        return list(getattr(self.location, 'coords', [])[::-1])
 
     def clean(self):
         if self.home_team == self.away_team:
-            raise ValidationError("Home team cannot be similar to the Away team.")
+            if self.home_team is None and self.away_team is None:
+                pass
+            else:
+                raise ValidationError("Home team cannot be similar to the Away team.")
+
 
 
 class Partner(models.Model):
@@ -130,7 +140,7 @@ class Partner(models.Model):
     logo = models.ImageField(null=True, blank=True, default='/placeholder.png')
     about = models.TextField(max_length=500)
     tag = models.CharField(max_length=200, null=True, blank=True)
-    url = models.CharField(max_length=100, null=True, blank=True)
+    url = models.URLField(null=True, blank=True)
     website = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
@@ -146,7 +156,7 @@ class SmsModel(models.Model):
 
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    counter = models.IntegerField(default=0, blank=False)
+    counter = models.PositiveIntegerField(default=0, blank=False)
     isVerified = models.BooleanField(default=False)
 
     def __str__(self):
@@ -160,10 +170,10 @@ class NotificationModel(models.Model):
 
 
 class FixtureResult(models.Model):
-    fixture = models.ForeignKey(Fixture, on_delete=models.CASCADE)
-    fixture_results = models.CharField(max_length=100)
-    MOTM = models.CharField(max_length=20, blank=True, null=True)
-
+    fixture = models.ForeignKey(Fixture, on_delete=models.CASCADE, related_name='associated_fixture')
+    home_team_result = models.PositiveIntegerField(default=0, blank=False)
+    away_team_result = models.PositiveIntegerField(default=0, blank=False)
+    MOTM = models.ForeignKey(Player, on_delete=models.SET_NULL, blank=True, null=True)
 
 # class MatchdaySquad(models.Model):
 #     pass
