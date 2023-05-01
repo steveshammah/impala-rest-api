@@ -18,9 +18,10 @@ class UsersSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'days_since_joined']
+        fields = ['id', 'username', 'first_name',
+                  'last_name', 'email', 'days_since_joined']
 
-    def get_days_since_joined(self, obj):
+    def get_days_since_joined(self, obj) -> str:
         return (now() - obj.date_joined).days
 
 
@@ -67,7 +68,8 @@ class CreateAuthorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Author
-        fields = ["username", "phone", "first_name", "last_name", "email", "profile_pic", "is_editor", "password"]
+        fields = ["username", "phone", "first_name", "last_name",
+                  "email", "profile_pic", "is_editor", "password"]
         validators: list = []
 
     def validate_username(self, value):
@@ -170,7 +172,8 @@ class UpdateAuthorSerializer(serializers.Serializer):
         if self.partial:
             if self.validated_data:
                 if self.validated_data.get("profile_pic"):
-                    self.instance.profile_pic = self.validated_data.get("profile_pic")
+                    self.instance.profile_pic = self.validated_data.get(
+                        "profile_pic")
                 if self.validated_data.get("is_editor"):
                     self.instance.is_editor = self.validated_data.get(
                         "is_editor")
@@ -200,7 +203,8 @@ class PlayerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Player
-        fields = ['id', 'player_name', 'profile_pic', 'team', 'social_link', 'date_of_birth', 'team', 'phone']
+        fields = ['id', 'player_name', 'profile_pic', 'team',
+                  'social_link', 'date_of_birth', 'team', 'phone']
 
 
 class ListPlayerSerializer(serializers.ModelSerializer):
@@ -338,7 +342,8 @@ class UpdatePlayerSerializer(serializers.Serializer):
 
     class Meta:
         model = Player
-        fields = ["phone", "profile_pic", "date_of_birth", "team", "social_link"]
+        fields = ["phone", "profile_pic",
+                  "date_of_birth", "team", "social_link"]
         validators: list = []
 
     def validate_phone(self, value):
@@ -389,7 +394,8 @@ class UpdatePlayerSerializer(serializers.Serializer):
                 return "No data to update"
         else:
             self.instance.profile_pic = self.validated_data.get("profile_pic")
-            self.instance.date_of_birth = self.validated_data.get("date_of_birth")
+            self.instance.date_of_birth = self.validated_data.get(
+                "date_of_birth")
             self.instance.phone = self.validated_data.get("phone")
             self.instance.team = self.validated_data.get("team")
             self.instance.social_link = self.validated_data.get("social_link")
@@ -518,7 +524,8 @@ class UpdatePlayerSerializer(serializers.Serializer):
 
     class Meta:
         model = Player
-        fields = ["phone", "profile_pic", "date_of_birth", "team", "social_link"]
+        fields = ["phone", "profile_pic",
+                  "date_of_birth", "team", "social_link"]
         validators: list = []
 
     def validate_phone(self, value):
@@ -569,7 +576,8 @@ class UpdatePlayerSerializer(serializers.Serializer):
                 return "No data to update"
         else:
             self.instance.profile_pic = self.validated_data.get("profile_pic")
-            self.instance.date_of_birth = self.validated_data.get("date_of_birth")
+            self.instance.date_of_birth = self.validated_data.get(
+                "date_of_birth")
             self.instance.phone = self.validated_data.get("phone")
             self.instance.team = self.validated_data.get("team")
             self.instance.social_link = self.validated_data.get("social_link")
@@ -584,7 +592,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         # fields = '__all__'
         exclude = ['created']
 
-    def get_author(self, obj):
+    def get_author(self, obj) -> str:
         return obj.author.user.username
 
 
@@ -595,7 +603,7 @@ class ListArticleSerializer(serializers.ModelSerializer):
         model = Article
         fields = ['article_author', 'title', 'content_1', 'image_1']
 
-    def get_article_author(self, obj):
+    def get_article_author(self, obj) -> str:
         return obj.author.user.username
 
 
@@ -629,13 +637,15 @@ class CreateArticleSerializer(serializers.ModelSerializer):
     def validate_title(self, value):
         article = Article.objects.get(title=value)
         if article:
-            raise serializers.ValidationError("The title entered already exists.")
+            raise serializers.ValidationError(
+                "The title entered already exists.")
         return value
 
     def validate_headline(self, value):
         article = Article.objects.get(headline=value)
         if article:
-            raise serializers.ValidationError("The headline entered already exists.")
+            raise serializers.ValidationError(
+                "The headline entered already exists.")
         return value
 
     def validate_content_1(self, value):
@@ -819,7 +829,8 @@ class CreateTeamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Author
-        fields = ["name", "logo", "description", "home_ground", "location", "league"]
+        fields = ["name", "logo", "description",
+                  "home_ground", "location", "league"]
         validators: list = []
 
     def validate_name(self, value):
@@ -870,7 +881,8 @@ class UpdateTeamSerializer(serializers.Serializer):
 
     class Meta:
         model = Author
-        fields = ["name", "logo", "description", "home_ground", "location", "league"]
+        fields = ["name", "logo", "description",
+                  "home_ground", "location", "league"]
         validators: list = []
 
     def validate_name(self, value):
@@ -927,7 +939,8 @@ class UpdateTeamSerializer(serializers.Serializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['product_name', 'image', 'price', 'description', 'color', 'count_in_stock']
+        fields = ['product_name', 'image', 'price',
+                  'description', 'color', 'count_in_stock']
         validators: list = []
 
     def validate_product_name(self, value):
@@ -952,7 +965,8 @@ class ProductSerializer(serializers.ModelSerializer):
         if self.partial:
             if self.validated_data:
                 if self.validated_data.get("product_name"):
-                    self.instance.product_name = self.validated_data.get("product_name")
+                    self.instance.product_name = self.validated_data.get(
+                        "product_name")
                 if self.validated_data.get("image"):
                     self.instance.image = self.validated_data.get(
                         "image")
@@ -972,12 +986,14 @@ class ProductSerializer(serializers.ModelSerializer):
             else:
                 return "No data to update"
         else:
-            self.instance.product_name = self.validated_data.get("product_name")
+            self.instance.product_name = self.validated_data.get(
+                "product_name")
             self.instance.image = self.validated_data.get("image")
             self.instance.description = self.validated_data.get("description")
             self.instance.price = self.validated_data.get("price")
             self.instance.color = self.validated_data.get("color")
-            self.instance.count_in_stock = self.validated_data.get("count_in_stock")
+            self.instance.count_in_stock = self.validated_data.get(
+                "count_in_stock")
             self.instance.save()
 
 
@@ -1003,12 +1019,14 @@ class CreateProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['product_name', 'image', 'price', 'description', 'color', 'count_in_stock']
+        fields = ['product_name', 'image', 'price',
+                  'description', 'color', 'count_in_stock']
         validators: list = []
 
     def validate_product_name(self, value):
         if value not in ["Jersey", "Hoodie", "Tshirt", "Sweater", "Watterbottle"]:
-            raise serializers.ValidationError("The selection has to be Jersey, Hoodie, Tshirt, Sweater or Watterbottle")
+            raise serializers.ValidationError(
+                "The selection has to be Jersey, Hoodie, Tshirt, Sweater or Watterbottle")
         return value
 
     def validate_image(self, value):
@@ -1056,12 +1074,14 @@ class UpdateProductSerializer(serializers.Serializer):
 
     class Meta:
         model = Product
-        fields = ['product_name', 'image', 'price', 'description', 'color', 'count_in_stock']
+        fields = ['product_name', 'image', 'price',
+                  'description', 'color', 'count_in_stock']
         validators: list = []
 
     def validate_product_name(self, value):
         if value not in ["Jersey", "Hoodie", "Tshirt", "Sweater", "Watterbottle"]:
-            raise serializers.ValidationError("The selection has to be Jersey, Hoodie, Tshirt, Sweater or Watterbottle")
+            raise serializers.ValidationError(
+                "The selection has to be Jersey, Hoodie, Tshirt, Sweater or Watterbottle")
         return value
 
     def validate_image(self, value):
@@ -1083,7 +1103,8 @@ class UpdateProductSerializer(serializers.Serializer):
         if self.partial:
             if self.validated_data:
                 if self.validated_data.get("product_name"):
-                    self.instance.product_name = self.validated_data.get("product_name")
+                    self.instance.product_name = self.validated_data.get(
+                        "product_name")
                 if self.validated_data.get("image"):
                     self.instance.image = self.validated_data.get(
                         "image")
@@ -1103,12 +1124,14 @@ class UpdateProductSerializer(serializers.Serializer):
             else:
                 return "No data to update"
         else:
-            self.instance.product_name = self.validated_data.get("product_name")
+            self.instance.product_name = self.validated_data.get(
+                "product_name")
             self.instance.image = self.validated_data.get("image")
             self.instance.description = self.validated_data.get("description")
             self.instance.price = self.validated_data.get("price")
             self.instance.color = self.validated_data.get("color")
-            self.instance.count_in_stock = self.validated_data.get("count_in_stock")
+            self.instance.count_in_stock = self.validated_data.get(
+                "count_in_stock")
             self.instance.save()
 
 
@@ -1249,7 +1272,8 @@ class UpdateFixtureSerializer(serializers.Serializer):
         if self.partial:
             if self.validated_data:
                 if self.validated_data.get("home_team"):
-                    self.instance.home_team = self.validated_data.get("home_team")
+                    self.instance.home_team = self.validated_data.get(
+                        "home_team")
                 if self.validated_data.get("away_team"):
                     self.instance.away_team = self.validated_data.get(
                         "away_team")
@@ -1433,9 +1457,11 @@ class UserSignInSerializer(serializers.Serializer):
             user = authenticate(request=self.context.get('request'),
                                 username=username, password=password)
             if not user:
-                raise serializers.ValidationError('Unable to log in with provided credentials.', code='authorization')
+                raise serializers.ValidationError(
+                    'Unable to log in with provided credentials.', code='authorization')
         else:
-            raise serializers.ValidationError('Must include username and password.', code='authorization')
+            raise serializers.ValidationError(
+                'Must include username and password.', code='authorization')
 
         data['user'] = user
         return data
@@ -1472,10 +1498,10 @@ class FixtureResultSerializer(serializers.ModelSerializer):
         model = FixtureResult
         fields = '__all__'
 
-    def get_fixture(self, obj):
+    def get_fixture(self, obj) -> str:
         return f'{obj.fixture.id}. {obj.fixture.home_team} VS {obj.fixture.away_team}'
 
-    def get_MOTM(self, obj):
+    def get_MOTM(self, obj) -> str:
         return obj.MOTM.user.username
 
 
@@ -1489,10 +1515,10 @@ class ListFixtureResultSerializer(serializers.ModelSerializer):
         model = FixtureResult
         fields = ['fixture', 'home_team_result', 'away_team_result', 'MOTM']
 
-    def get_fixture(self, obj):
+    def get_fixture(self, obj) -> str:
         return f'{obj.fixture.id}. {obj.fixture.home_team} VS {obj.fixture.away_team}'
 
-    def get_MOTM(self, obj):
+    def get_MOTM(self, obj) -> str:
         return obj.MOTM.user.username
 
 
@@ -1512,7 +1538,8 @@ class CreateFixtureResultSerializer(serializers.ModelSerializer):
         fixture_results = fixture.associated_fixture.all().count()
 
         if fixture_results:
-            raise serializers.ValidationError("A fixture cannot have more than one result.")
+            raise serializers.ValidationError(
+                "A fixture cannot have more than one result.")
         value = fixture
         return value
 
@@ -1540,7 +1567,8 @@ class CreateFixtureResultSerializer(serializers.ModelSerializer):
             validated_data["fixture_result"] = fixture_result
 
         except Exception:
-            raise serializers.ValidationError("Fixture-result creation failed.")
+            raise serializers.ValidationError(
+                "Fixture-result creation failed.")
 
         return validated_data
 
@@ -1594,7 +1622,9 @@ class UpdateFixtureResultSerializer(serializers.Serializer):
                 return "No data to update"
         else:
             self.instance.fixture = self.validated_data.get("fixture")
-            self.instance.home_team_result = self.validated_data.get("home_team_result")
-            self.instance.away_team_result = self.validated_data.get("away_team_result")
+            self.instance.home_team_result = self.validated_data.get(
+                "home_team_result")
+            self.instance.away_team_result = self.validated_data.get(
+                "away_team_result")
             self.instance.MOTM = self.validated_data.get("MOTM")
             self.instance.save()

@@ -20,6 +20,9 @@ from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework.settings import api_settings
+from rest_framework.exceptions import NotFound, ValidationError as ExceptValidationError
+from drf_spectacular.utils import extend_schema
+from django.core.exceptions import ObjectDoesNotExist
 
 from .models import *
 from .serializers import *
@@ -39,7 +42,7 @@ def home(request):
         'Create Article': '/api/article-create/',
         'Update Article': '/api/article-update/<str:pk>',
         'Delete Article': '/api/article-delete/<str:pk>',
-       
+
     }
     return Response(api_urls)
 
@@ -192,69 +195,73 @@ class AuthViewSet(GenericViewSet):
     #
     #     return Response({"id": instance["user"].id}, status=status.HTTP_201_CREATED)
 
+    @action(methods=['post'], detail=False)
     def login(self, request):
         """
         Login USER ViewSet.
         """
-        serializer = self.get_serializer(
-            data=request.data, context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        serializer_user = serializer.validated_data['user']
-        username = serializer.validated_data['username']
-        password = serializer.validated_data['password']
+        try:
+            serializer = self.get_serializer(
+                data=request.data, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            serializer_user = serializer.validated_data['user']
+            username = serializer.validated_data['username']
+            password = serializer.validated_data['password']
 
-        user = authenticate(username=username, password=password)
+            user = authenticate(username=username, password=password)
 
-        if user == serializer_user:
-            if user is not None:
-                if user.is_active:
-                    # login(request, user)
-                    token, created = Token.objects.get_or_create(user=user)
+            if user == serializer_user:
+                if user is not None:
+                    if user.is_active:
+                        # login(request, user)
+                        token, created = Token.objects.get_or_create(user=user)
+                    else:
+                        raise serializers.ValidationError(
+                            {"detail": "This account is inactive."})
                 else:
                     raise serializers.ValidationError(
-                        {"detail": "This account is inactive."})
-            else:
-                raise serializers.ValidationError(
-                    {"detail": "Invalid! Please try again."})
+                        {"detail": "Invalid! Please try again."})
 
-            user_profile = User.objects.get(id=user.id)
-            content = {
-                "id": str(user_profile.id),
-                "name": str(user_profile.username),
-            }
-            return Response(content, status=status.HTTP_200_OK)
-        return Response({"Invalid! Please try again."})
+                user_profile = User.objects.get(id=user.id)
+                content = {
+                    "id": str(user_profile.id),
+                    "name": str(user_profile.username),
+                }
+                return Response(content, status=status.HTTP_200_OK)
+        except:
+            return Response({"Invalid! Please try again."}, status=status.HTTP_400_BAD_REQUEST)
 
+    @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated])
     def logout(self, request):
         """
         Logout USER ViewSet.
         """
-        if self.request.user.is_authenticated:
+        try:
             self.request.user.auth_token.delete()
             logout(request)
             content = {"success": "User logged out successfully."}
-            return Response(content, status=status.HTTP_204_NO_CONTENT)
-        return Response({"User": "Not Found"})
+            return Response(content, status=status.HTTP_200_OK)
+        except:
+            return Response({"User": "Not Found"}, status=status.HTTP_404_NOT_FOUND)
 
+    @action(methods=['get'], detail=False, permission_classes=[IsAuthenticated])
     def retrieve(self, request):
         """
         Retrieve USER ViewSet.
         """
-        if self.request.user.is_authenticated:
-            content = {
-                "id": str(request.user.id),
-                "name": str(request.user),
-                # "auth": str(request.auth),
-            }
-            return Response(content)
-        return Response({"User": "Not Found. Please login."})
+
+        content = {
+            "id": str(request.user.id),
+            "name": str(request.user),
+            # "auth": str(request.auth),
+        }
+        return Response(content, status=status.HTTP_200_OK)
 
     def get_serializer_class(self):
         """
         Users should receive the specific serializer to be used.
         """
-        # if self.action == "register":
-        #     return CreateProfileSerializer
+
         if self.action == "login":
             return UserSignInSerializer
 
@@ -301,7 +308,7 @@ class AuthorViewSet(GenericViewSet):
             "data": serializer.data,
             "total": len(serializer.data)
         }
-        return Response(content)
+        return Response(content, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
         """
@@ -309,7 +316,7 @@ class AuthorViewSet(GenericViewSet):
         """
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, *args, **kwargs):
         """
@@ -397,9 +404,9 @@ class AuthorViewSet(GenericViewSet):
             return CreateAuthorSerializer
         elif self.action == "list":
             return ListAuthorSerializer
-        if self.action in ["update", "partial_update"]:
+        elif self.action in ["update", "partial_update"]:
             return UpdateAuthorSerializer
-        elif self.action in ["retrieve"]:
+        else:
             return AuthorSerializer
 
 
@@ -445,7 +452,7 @@ class TeamViewSet(GenericViewSet):
             "data": serializer.data,
             "total": len(serializer.data)
         }
-        return Response(content)
+        return Response(content, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
         """
@@ -453,7 +460,7 @@ class TeamViewSet(GenericViewSet):
         """
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, *args, **kwargs):
         """
@@ -531,9 +538,9 @@ class TeamViewSet(GenericViewSet):
             return CreateTeamSerializer
         elif self.action == "list":
             return ListTeamSerializer
-        if self.action in ["update", "partial_update"]:
+        elif self.action in ["update", "partial_update"]:
             return UpdateTeamSerializer
-        elif self.action in ["retrieve"]:
+        else:
             return TeamSerializer
 
 
@@ -579,7 +586,7 @@ class PlayerViewSet(GenericViewSet):
             "data": serializer.data,
             "total": len(serializer.data)
         }
-        return Response(content)
+        return Response(content, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
         """
@@ -587,7 +594,7 @@ class PlayerViewSet(GenericViewSet):
         """
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, *args, **kwargs):
         """
@@ -667,13 +674,26 @@ class PlayerViewSet(GenericViewSet):
             return CreatePlayerSerializer
         elif self.action == "list":
             return ListPlayerSerializer
-        if self.action in ["update", "partial_update"]:
+        elif self.action in ["update", "partial_update"]:
             return UpdatePlayerSerializer
-        elif self.action in ["retrieve"]:
+        else:
             return PlayerSerializer
 
 
 class ArticleViewSet(GenericViewSet):
+
+    @extend_schema(
+        description="Create a new Article",
+        # responses={
+        #     status.HTTP_201_CREATED: CreateArticleSerializer(),
+        #     status.HTTP_400_BAD_REQUEST: "Invalid input data",
+        # }
+        responses={
+            200: CreateArticleSerializer(),
+            400: 'Bad Request',
+            404: 'Not Found',
+        }
+    )
     def create(self, request, *args, **kwargs):
         """
         Create article instance .
@@ -684,9 +704,11 @@ class ArticleViewSet(GenericViewSet):
 
         try:
             instance = serializer.save()
-        except Exception:
+        except Article.DoesNotExist:
             # logger.exception("failed to save author profile")
-            raise serializers.ValidationError("Failed to save article instance")
+            # raise serializers.ValidationError(
+            #     "Failed to save article instance")
+            return Response({'detail': 'Not Found'}, status=status.HTTP_404_NOT_FOUND)
 
         return Response({"id": instance["article"].id, "article": instance["article"].headline}, status=status.HTTP_201_CREATED)
 
@@ -699,32 +721,71 @@ class ArticleViewSet(GenericViewSet):
         except (TypeError, KeyError):
             return {}
 
+    @extend_schema(
+        description="List Articles",
+        # responses={
+        #     status.HTTP_200_OK: ListArticleSerializer(many=True),
+        #     status.HTTP_401_UNAUTHORIZED: "Authentication credentials were not provided.",
+        #     status.HTTP_404_NOT_FOUND: "List items not found.",
+
+        # }
+        responses={
+            200: ListArticleSerializer(many=True),
+            401: "Authentication credentials were not provided.",
+            404: "List items not found."
+        }
+    )
     def list(self, request, *args, **kwargs):
         """
-        List a queryset.
+        List Articles.
         """
-        queryset = self.filter_queryset(self.get_queryset())
+        try:
+            queryset = self.filter_queryset(self.get_queryset())
 
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
 
-        serializer = self.get_serializer(queryset, many=True)
-        content = {
-            "data": serializer.data,
-            "total": len(serializer.data)
+            serializer = self.get_serializer(queryset, many=True)
+            content = {
+                "data": serializer.data,
+                "total": len(serializer.data)
+            }
+            return Response(content, status=status.HTTP_200_OK)
+
+        # except ValidationError as e:
+        #     raise ExceptValidationError(
+        #         {"Auth credentials not provided."}, code=401)
+        # except ObjectDoesNotExist as e:
+        #     raise NotFound({"List items not found."}, code=404)
+        except Exception as e:
+            return Response({"Not Found"}, status=status.HTTP_404_NOT_FOUND)
+
+    @extend_schema(
+        description="Retrieve an Article by ID",
+        responses={
+            status.HTTP_200_OK: ArticleSerializer(),
+            status.HTTP_404_NOT_FOUND: "Article not found",
         }
-        return Response(content)
-
+    )
     def retrieve(self, request, *args, **kwargs):
         """
         Retrieve an article instance.
         """
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        description="Update an Article by ID",
+        request=UpdateArticleSerializer,
+        responses={
+            status.HTTP_200_OK: UpdateArticleSerializer(),
+            status.HTTP_400_BAD_REQUEST: "Invalid input data",
+            status.HTTP_404_NOT_FOUND: "Article not found",
+        }
+    )
     def update(self, request, *args, **kwargs):
         """
         Update an article instance.
@@ -736,10 +797,11 @@ class ArticleViewSet(GenericViewSet):
         serializer.is_valid(raise_exception=True)
         try:
             self.perform_update(serializer)
-        except Exception:
+        except Exception as e:
             # logger.exception("failed to update author profile")
-            raise serializers.ValidationError(
-                'Update failed. Please try again.')
+            # raise serializers.ValidationError(
+            #     'Update failed. Please try again.')
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
@@ -751,10 +813,26 @@ class ArticleViewSet(GenericViewSet):
     def perform_update(self, serializer):
         serializer.save()
 
+    @extend_schema(
+        description="Partial update an article by ID",
+        request=UpdateArticleSerializer,
+        responses={
+            status.HTTP_200_OK: UpdateArticleSerializer(),
+            status.HTTP_400_BAD_REQUEST: "Invalid input data",
+            status.HTTP_404_NOT_FOUND: "Article not found",
+        }
+    )
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
         return self.update(request, *args, **kwargs)
 
+    @extend_schema(
+        description="Delete an Article by ID",
+        responses={
+            status.HTTP_204_NO_CONTENT: "Article deleted successfully",
+            status.HTTP_404_NOT_FOUND: "Article not found",
+        }
+    )
     def destroy(self, request, *args, **kwargs):
         """
         Destroy an article instance.
@@ -801,9 +879,9 @@ class ArticleViewSet(GenericViewSet):
             return CreateArticleSerializer
         elif self.action == "list":
             return ListArticleSerializer
-        if self.action in ["update", "partial_update"]:
+        elif self.action in ["update", "partial_update"]:
             return UpdateArticleSerializer
-        elif self.action in ["retrieve"]:
+        else:
             return ArticleSerializer
 
 
@@ -820,7 +898,8 @@ class ProductViewSet(GenericViewSet):
             instance = serializer.save()
         except Exception:
             # logger.exception("failed to save author profile")
-            raise serializers.ValidationError("Failed to save product instance")
+            raise serializers.ValidationError(
+                "Failed to save product instance")
 
         return Response({"id": instance["product"].id, "product": instance["product"].product_name}, status=status.HTTP_201_CREATED)
 
@@ -849,7 +928,7 @@ class ProductViewSet(GenericViewSet):
             "data": serializer.data,
             "total": len(serializer.data)
         }
-        return Response(content)
+        return Response(content, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
         """
@@ -857,7 +936,7 @@ class ProductViewSet(GenericViewSet):
         """
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, *args, **kwargs):
         """
@@ -935,9 +1014,9 @@ class ProductViewSet(GenericViewSet):
             return CreateProductSerializer
         elif self.action == "list":
             return ListProductSerializer
-        if self.action in ["update", "partial_update"]:
+        elif self.action in ["update", "partial_update"]:
             return UpdateProductSerializer
-        elif self.action in ["retrieve"]:
+        else:
             return ProductSerializer
 
 
@@ -954,7 +1033,8 @@ class FixtureViewSet(GenericViewSet):
             instance = serializer.save()
         except Exception:
             # logger.exception("failed to save author profile")
-            raise serializers.ValidationError("Failed to save fixture instance")
+            raise serializers.ValidationError(
+                "Failed to save fixture instance")
 
         return Response({"id": instance["fixture"].id,
                          "fixture": f'{instance["fixture"].home_team} VS {instance["fixture"].away_team}'},
@@ -985,7 +1065,7 @@ class FixtureViewSet(GenericViewSet):
             "data": serializer.data,
             "total": len(serializer.data)
         }
-        return Response(content)
+        return Response(content, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
         """
@@ -993,7 +1073,7 @@ class FixtureViewSet(GenericViewSet):
         """
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, *args, **kwargs):
         """
@@ -1071,9 +1151,9 @@ class FixtureViewSet(GenericViewSet):
             return CreateFixtureSerializer
         elif self.action == "list":
             return ListFixtureSerializer
-        if self.action in ["update", "partial_update"]:
+        elif self.action in ["update", "partial_update"]:
             return UpdateFixtureSerializer
-        elif self.action in ["retrieve"]:
+        else:
             return FixtureSerializer
 
 
@@ -1090,7 +1170,8 @@ class PartnerViewSet(GenericViewSet):
             instance = serializer.save()
         except Exception:
             # logger.exception("failed to save author profile")
-            raise serializers.ValidationError("Failed to save partner instance")
+            raise serializers.ValidationError(
+                "Failed to save partner instance")
 
         return Response({"id": instance["partner"].id, "partner": instance["partner"].name},
                         status=status.HTTP_201_CREATED)
@@ -1120,7 +1201,7 @@ class PartnerViewSet(GenericViewSet):
             "data": serializer.data,
             "total": len(serializer.data)
         }
-        return Response(content)
+        return Response(content, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
         """
@@ -1128,7 +1209,7 @@ class PartnerViewSet(GenericViewSet):
         """
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, *args, **kwargs):
         """
@@ -1206,9 +1287,9 @@ class PartnerViewSet(GenericViewSet):
             return CreatePartnerSerializer
         elif self.action == "list":
             return ListPartnerSerializer
-        if self.action in ["update", "partial_update"]:
+        elif self.action in ["update", "partial_update"]:
             return UpdatePartnerSerializer
-        elif self.action in ["retrieve"]:
+        else:
             return PartnerSerializer
 
 
@@ -1257,7 +1338,8 @@ class FixtureResultViewSet(GenericViewSet):
             instance = serializer.save()
         except Exception:
             # logger.exception("failed to save author profile")
-            raise serializers.ValidationError("Failed to save fixture-result instance")
+            raise serializers.ValidationError(
+                "Failed to save fixture-result instance")
 
         return Response({"id": instance["fixture_result"].id,
                          "fixture_result":
@@ -1292,7 +1374,7 @@ class FixtureResultViewSet(GenericViewSet):
             "data": serializer.data,
             "total": len(serializer.data)
         }
-        return Response(content)
+        return Response(content, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
         """
@@ -1300,7 +1382,7 @@ class FixtureResultViewSet(GenericViewSet):
         """
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, *args, **kwargs):
         """
@@ -1378,7 +1460,7 @@ class FixtureResultViewSet(GenericViewSet):
             return CreateFixtureResultSerializer
         elif self.action == "list":
             return ListFixtureResultSerializer
-        if self.action in ["update", "partial_update"]:
+        elif self.action in ["update", "partial_update"]:
             return UpdateFixtureResultSerializer
-        elif self.action in ["retrieve"]:
+        else:
             return FixtureResultSerializer

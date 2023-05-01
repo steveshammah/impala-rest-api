@@ -13,7 +13,8 @@ if WINDOWS:
     GEOS_LIBRARY_PATH = r'C:\OSGeo4W\bin\geos_c.dll'
     OSGEO4W = r"C:\OSGeo4W"
     os.environ['OSGEO4W_ROOT'] = OSGEO4W
-    os.environ['GDAL_DATA'] = "C:\Program Files\GDAL\gdal-data" + r"\share\gdal"
+    os.environ['GDAL_DATA'] = "C:\Program Files\GDAL\gdal-data" + \
+        r"\share\gdal"
     os.environ['PROJ_LIB'] = OSGEO4W + r"\share\proj"
     os.environ['PATH'] = OSGEO4W + r"\bin;" + os.environ['PATH']
 
