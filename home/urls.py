@@ -21,26 +21,6 @@ urlpatterns = [
     path('products/<str:pk>/', views.get_product, name='product page'),
 
     # --------- ** CLASS-BASED URLS ** --------#
-    path(
-        "v1/auth/login/",
-        views.AuthViewSet.as_view({"post": "login"}),
-    ),
-    path(
-        "v1/auth/retrieve/",
-        views.AuthViewSet.as_view(
-            {
-                "get": "retrieve",
-            }
-        ),
-    ),
-    path(
-        "v1/auth/logout/",
-        views.AuthViewSet.as_view(
-            {
-                "post": "logout",
-            }
-        ),
-    ),
     re_path(
             r"^v1/authors/$",
             views.AuthorViewSet.as_view(

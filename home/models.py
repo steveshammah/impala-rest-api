@@ -7,8 +7,10 @@ from datetime import date
 
 
 class Author(models.Model):
-    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
-    profile_pic = models.ImageField(default="", upload_to='uploads/', null=True, blank=True)
+    user = models.OneToOneField(
+        User, null=True, blank=True, on_delete=models.CASCADE)
+    profile_pic = models.ImageField(
+        default="", upload_to='uploads/', null=True, blank=True)
     phone = models.CharField(max_length=100, default="")
     is_editor = models.BooleanField(default=0)
 
@@ -32,11 +34,14 @@ class Team(models.Model):
 
 
 class Player(models.Model):
-    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User, null=True, blank=True, on_delete=models.CASCADE)
     date_of_birth = models.DateField(blank=True, null=True)
     phone = models.CharField(max_length=100)
-    profile_pic = models.ImageField(default="", upload_to='uploads/', null=True, blank=True)
-    team = models.ForeignKey(Team, null=True, blank=True, on_delete=models.SET_NULL)
+    profile_pic = models.ImageField(
+        default="", upload_to='uploads/', null=True, blank=True)
+    team = models.ForeignKey(
+        Team, null=True, blank=True, on_delete=models.SET_NULL)
     social_link = models.CharField(max_length=150, null=True, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
 
@@ -67,15 +72,18 @@ class Tag(models.Model):
 
 
 class Article(models.Model):
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, null=True, blank=True)
+    author = models.ForeignKey(
+        Author, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=100)
     headline = models.CharField(max_length=250)
     content_1 = models.TextField(max_length=None)
     image_1 = models.ImageField(upload_to='uploads/', null=True, blank=True)
-    caption_1 = models.CharField(max_length=250, null=True, default='Impala Rugby')
+    caption_1 = models.CharField(
+        max_length=250, null=True, default='Impala Rugby')
     content_2 = models.TextField(max_length=None, null=True)
     image_2 = models.ImageField(upload_to='uploads/', null=True, blank=True)
-    caption_2 = models.CharField(max_length=250, null=True, default='Impala Rugby')
+    caption_2 = models.CharField(
+        max_length=250, null=True, default='Impala Rugby')
     type = models.CharField(max_length=100, null=True, default='article')
     tags = models.CharField(max_length=150, null=True, default='Impala')
     created = models.DateTimeField(auto_now_add=True)
@@ -99,11 +107,13 @@ class Product(models.Model):
     product_name = models.CharField(
         choices=PRODUCT_TYPE, max_length=150, blank=True, null=True
     )
-    image = models.ImageField(null=True, blank=True, default='/placeholder.png')
+    image = models.ImageField(null=True, blank=True,
+                              default='/placeholder.png')
     price = models.PositiveIntegerField()
     description = models.TextField(max_length=500)
     color = models.CharField(max_length=100, blank=True, null=True)
-    count_in_stock = models.PositiveIntegerField(default=0, null=True, blank=True)
+    count_in_stock = models.PositiveIntegerField(
+        default=0, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
@@ -115,8 +125,10 @@ class Product(models.Model):
 
 
 class Fixture(models.Model):
-    home_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='home_team', null=True)
-    away_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='away_team', null=True)
+    home_team = models.ForeignKey(
+        Team, on_delete=models.CASCADE, related_name='home_team', null=True)
+    away_team = models.ForeignKey(
+        Team, on_delete=models.CASCADE, related_name='away_team', null=True)
     match_date = models.DateField(None)
     venue = models.CharField(max_length=100)
     location = gis_models.PointField(srid=4326, null=True, blank=True)
@@ -131,8 +143,8 @@ class Fixture(models.Model):
             if self.home_team is None and self.away_team is None:
                 pass
             else:
-                raise ValidationError("Home team cannot be similar to the Away team.")
-
+                raise ValidationError(
+                    "Home team cannot be similar to the Away team.")
 
 
 class Partner(models.Model):
@@ -170,10 +182,12 @@ class NotificationModel(models.Model):
 
 
 class FixtureResult(models.Model):
-    fixture = models.ForeignKey(Fixture, on_delete=models.CASCADE, related_name='associated_fixture')
+    fixture = models.ForeignKey(
+        Fixture, on_delete=models.CASCADE, related_name='associated_fixture')
     home_team_result = models.PositiveIntegerField(default=0, blank=False)
     away_team_result = models.PositiveIntegerField(default=0, blank=False)
-    MOTM = models.ForeignKey(Player, on_delete=models.SET_NULL, blank=True, null=True)
+    MOTM = models.ForeignKey(
+        Player, on_delete=models.SET_NULL, blank=True, null=True)
 
 # class MatchdaySquad(models.Model):
 #     pass

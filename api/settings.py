@@ -13,7 +13,8 @@ if WINDOWS:
     GEOS_LIBRARY_PATH = r'C:\OSGeo4W\bin\geos_c.dll'
     OSGEO4W = r"C:\OSGeo4W"
     os.environ['OSGEO4W_ROOT'] = OSGEO4W
-    os.environ['GDAL_DATA'] = "C:\Program Files\GDAL\gdal-data" + r"\share\gdal"
+    os.environ['GDAL_DATA'] = "C:\Program Files\GDAL\gdal-data" + \
+        r"\share\gdal"
     os.environ['PROJ_LIB'] = OSGEO4W + r"\share\proj"
     os.environ['PATH'] = OSGEO4W + r"\bin;" + os.environ['PATH']
 
@@ -46,6 +47,7 @@ ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 
 INSTALLED_APPS = [
     'home',
+    'members.apps.MembersConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -124,12 +126,21 @@ DATABASES["default"]["ENGINE"] = 'django.contrib.gis.db.backends.postgis'
 
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-#         'NAME': 'postgres',
-#         'USER': 'postgres',
-#         'PASSWORD': 'Hoonigan15',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': os.environ.get('MYSQL_DBNAME'),
+#        'USER': os.environ.get('MYSQL_DBUSER'),
+#        'PASSWORD': os.environ.get('MYSQL_DBPASSWORD'),
+#        'HOST': os.environ.get('MYSQL_DBHOST'),
+#        'PORT': '3306',
+#     },
+
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get('POSTGRES_NAME'),
+#         'USER': os.environ.get('POSTGRES_USER'),
+#         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+#         'HOST': 'db',
+#         'PORT': 5432,
 #     },
 # }
 
