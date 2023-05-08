@@ -380,3 +380,7 @@ cython_debug/
 
 ### Django ###
 *.pyc
+
+##dbsqlite##
+db.sqlite
+db.sqlite3
