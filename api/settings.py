@@ -46,8 +46,16 @@ ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 # Application definition
 
 INSTALLED_APPS = [
-    'home',
+    'home.apps.HomeConfig',
     'members.apps.MembersConfig',
+    'teamplayer.apps.TeamplayerConfig',
+    'league.apps.LeagueConfig',
+    'messaging.apps.MessagingConfig',
+    'officiating.apps.OfficiatingConfig',
+    'partners.apps.PartnersConfig',
+    'store.apps.StoreConfig',
+    'paymentsubs.apps.PaymentsubsConfig',
+
 
     'django.contrib.admin',
     'django.contrib.auth',

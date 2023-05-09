@@ -42,62 +42,16 @@ urlpatterns = [
             }
         ),
         name="authors.action",
-
-
         ),
     re_path(
-            r"^v1/teams/$",
-            views.TeamViewSet.as_view(
-                {
-                    "get": "list",
-                    "post": "create",
-                }
-            ),
-            name="teams",
-        ),
-    re_path(
-        r"^v1/teams/%s/$" % PVAR_PROFILE_ID,
-        views.TeamViewSet.as_view(
+        r"^v1/articles/$",
+        views.ArticleViewSet.as_view(
             {
-                "get": "retrieve",
-                "put": "update",
-                "patch": "partial_update",
-                "delete": "destroy",
+                "get": "list",
+                "post": "create",
             }
         ),
-        name="teams.action",
-        ),
-    re_path(
-            r"^v1/players/$",
-            views.PlayerViewSet.as_view(
-                {
-                    "get": "list",
-                    "post": "create",
-                }
-            ),
-            name="players",
-        ),
-    re_path(
-        r"^v1/players/%s/$" % PVAR_PROFILE_ID,
-        views.PlayerViewSet.as_view(
-            {
-                "get": "retrieve",
-                "put": "update",
-                "patch": "partial_update",
-                "delete": "destroy",
-            }
-        ),
-        name="players.action",
-        ),
-    re_path(
-            r"^v1/articles/$",
-            views.ArticleViewSet.as_view(
-                {
-                    "get": "list",
-                    "post": "create",
-                }
-            ),
-            name="articles",
+        name="articles",
         ),
     re_path(
         r"^v1/articles/%s/$" % PVAR_PROFILE_ID,
@@ -110,93 +64,5 @@ urlpatterns = [
             }
         ),
         name="articles.action",
-        ),
-    re_path(
-            r"^v1/products/$",
-            views.ProductViewSet.as_view(
-                {
-                    "get": "list",
-                    "post": "create",
-                }
-            ),
-            name="products",
-        ),
-    re_path(
-        r"^v1/products/%s/$" % PVAR_PROFILE_ID,
-        views.ProductViewSet.as_view(
-            {
-                "get": "retrieve",
-                "put": "update",
-                "patch": "partial_update",
-                "delete": "destroy",
-            }
-        ),
-        name="products.action",
-        ),
-    re_path(
-            r"^v1/fixtures/$",
-            views.FixtureViewSet.as_view(
-                {
-                    "get": "list",
-                    "post": "create",
-                }
-            ),
-            name="fixtures",
-        ),
-    re_path(
-        r"^v1/fixtures/%s/$" % PVAR_PROFILE_ID,
-        views.FixtureViewSet.as_view(
-            {
-                "get": "retrieve",
-                "put": "update",
-                "patch": "partial_update",
-                "delete": "destroy",
-            }
-        ),
-        name="fixtures.action",
-        ),
-    re_path(
-            r"^v1/partners/$",
-            views.PartnerViewSet.as_view(
-                {
-                    "get": "list",
-                    "post": "create",
-                }
-            ),
-            name="partners",
-        ),
-    re_path(
-        r"^v1/partners/%s/$" % PVAR_PROFILE_ID,
-        views.PartnerViewSet.as_view(
-            {
-                "get": "retrieve",
-                "put": "update",
-                "patch": "partial_update",
-                "delete": "destroy",
-            }
-        ),
-        name="partners.action",
-        ),
-    re_path(
-            r"^v1/fixture_results/$",
-            views.FixtureResultViewSet.as_view(
-                {
-                    "get": "list",
-                    "post": "create",
-                }
-            ),
-            name="fixture_results",
-        ),
-    re_path(
-        r"^v1/fixture_results/%s/$" % PVAR_PROFILE_ID,
-        views.FixtureResultViewSet.as_view(
-            {
-                "get": "retrieve",
-                "put": "update",
-                "patch": "partial_update",
-                "delete": "destroy",
-            }
-        ),
-        name="fixture_results.action",
         ),
 ]
